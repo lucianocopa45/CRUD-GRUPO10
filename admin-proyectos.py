@@ -61,3 +61,21 @@ while True:
             proyecto[nombreProyecto] = {"nombreResponsable": nombreResponsable, "estado": estado, 'avance': f"{avance}%"}
             
             input("\nPresiona ENTER para continuar...")
+        case "2":
+            print("Usted selecciono la opcion: ", opcion)
+            if len(proyecto) == 0:
+                print("No hay proyectos registrados")
+                input("\nPresiona ENTER para continuar...")
+
+            else:
+                i=1
+                for nombreProyecto, datos in proyecto.items():
+                    
+                    avance_num = int(avance)
+                    barra = "█" * (avance_num // 10) + "-" * (10 - avance_num // 10)
+                    print(i, ".-", "Nombre del proyecto:", nombreProyecto, 
+                        "- Nombre del responsable:", datos["nombreResponsable"], 
+                        "- Estado:", datos["estado"],
+                        f"Avance logrado: [{barra}] {avance_num}%")
+                    i += 1
+                    input("\nPresiona ENTER para continuar...")
