@@ -79,3 +79,6 @@ while True:
                         f"Avance logrado: [{barra}] {avance_num}%")
                     i += 1
                     input("\nPresiona ENTER para continuar...")
+        case _:
+            print("Opción NO válida. Intente nuevamente")
+            input("Presione ENTER para continuar ...")
