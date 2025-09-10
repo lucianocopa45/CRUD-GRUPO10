@@ -25,5 +25,39 @@ while True:
     print("6.- Guardar agenda en JSON")
     print("7.- Recuperar agenda desde JSON")
     print("8.- Salir")
+    
+        # Pedir al usuario que ingrese una opción
+    opcion = input("\nElegir una opcion: ")
+    
+    match opcion:
+        case "1":
+            print("Usted selecciono la opcion: ", opcion)
+            nombreProyecto = input("\nIngrese nombre del proyecto: ").strip()
+            if not nombreProyecto:
+                print("EL nombre no puede estar vacio")
+                input("\nPresiona ENTER para continuar...")
+                continue
 
+            nombreResponsable = input("\nIngrese el nombre del responsable:").strip()
+            if not nombreResponsable:
+                print("EL nombre del responsable no puede estar vacio")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            estado = input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()
+            estados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
 
+            if estado not in ["1", "2", "3"]:
+                print("Estado inválido")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            estado = estados_validos[estado]
+
+            avance = input("Ingrese el avance logrado: ").strip()
+            if not avance.isdigit() or not (0 <= int(avance) <= 100):
+                print("EL avance no puede estar vacio")
+                input("\nPresiona ENTER para continuar...")
+                continue
+                
+            proyecto[nombreProyecto] = {"nombreResponsable": nombreResponsable, "estado": estado, 'avance': f"{avance}%"}
+            
+            input("\nPresiona ENTER para continuar...")
