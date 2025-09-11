@@ -75,7 +75,7 @@ while True:
             proyecto[nombreProyecto] = {
                 "nombreResponsable": nombreResponsable, # Responsable del proyecto
                 "estado": estado,  # Estado actual
-                'avance': f"{avance}%"} # Avance en formato texto con "%"
+                'avance': int(avance)} # Avance en formato texto con "%"
             
             # Pausa para que el usuario vea el resultado antes de volver al menú
             input("\nPresiona ENTER para continuar...")
@@ -92,9 +92,10 @@ while True:
                 
                 # Recorremos todos los proyectos del diccionario
                 for nombreProyecto, datos in proyecto.items():
-                    
+                    print(datos)
                     # Obtenemos el avance como número (quitando el "%")
-                    avance_num = int(avance)
+                    convertAvance = datos["avance"]
+                    avance_num = int(convertAvance)
                     
                     # Creamos una barra de progreso de 10 bloques
                     barra = "█" * (avance_num // 10) + "-" * (10 - avance_num // 10)
@@ -107,6 +108,67 @@ while True:
                     i += 1 # Incrementa el contador de proyectos
                     # Pausa para que el usuario pueda leer la información
                     input("\nPresiona ENTER para continuar...")
+        case "3":
+            # Caso 3: Actualizar un proyecto creado por su nombre
+            print("Usted selecciono la opcion: ", opcion)
+            
+            # Verificamos si hay proyectos en la agenda
+            if len(proyecto) == 0:
+                print("No hay proyectos registrados")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            
+            # Pedimos el nombre del proyecto a actualizar                                    
+            nombreProyecto = input("\nIngrese el nombre del proyecto a actualizar: ").strip()
+            
+            # Validamos si el proyecto existe
+            if nombreProyecto not in proyecto:
+                print(" El proyecto no existe en la agenda.")
+                input("\nPresiona ENTER para continuar...")
+                continue
+                        # Recuperamos los datos actuales del proyecto
+            datos = proyecto[nombreProyecto]
+            
+                        # Mostramos la información actual del proyecto
+            print(f"\n Datos actuales del proyecto '{nombreProyecto}':")
+            print(f"- Responsable: {datos['nombreResponsable']}")
+            print(f"- Estado: {datos['estado']}")
+            print(f"- Avance: {datos['avance']}%")
+            print(datos)  # Muestra el diccionario completo (útil para depuración)
+            input("\nPresiona ENTER para continuar...")
+            
+            # Actualizar nombre del responsable (opcional, se mantiene si presiona ENTER)
+            newNombreResponsable = input("Ingrese nuevo nombre del responsable (de no ser asi, ENTER)").strip()
+            if newNombreResponsable:
+                datos['nombreResponsable'] = newNombreResponsable
+                
+            # Actualizar estado del proyecto                
+            newEstado = input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()             
+            
+            # Validamos que el estado ingresado sea correcto                        
+            if newEstado:# Solo si ingresó algo
+                newEstados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
+            
+                newEstado = newEstados_validos[newEstado]
+                
+                datos['estado'] = newEstado
+                
+            # Actualizar avance del proyecto
+            newAvance = input("Ingrese el avance logrado: ").strip()
+            if newAvance:
+                if newAvance.isdigit() and 0 <= int(newAvance) <= 100:
+                    datos["avance"] = int(newAvance) # Guardamos como porcentaje para mantener consistencia
+                else:
+                    print("Avance inválido. Se mantiene el anterior.")
+                    
+            # Guardamos los cambios en el diccionario principal                    
+            proyecto[nombreProyecto] = datos
+            
+            # Confirmación de actualización
+            print("\nProyecto actualizado con éxito.")
+            print(datos)  # Mostramos el proyecto actualizado
+
+            input("\nPresiona ENTER para continuar...")
         case _:
             # Caso por defecto: cuando la opción no coincide con ninguna válida
             print("Opción NO válida. Intente nuevamente")
