@@ -192,6 +192,61 @@ def buscar_Diario_PorTitulo():
         print("\n😔 No se encontraron Diarios con ese criterio. 😔")
     pausar()  # Pausamos para que el usuario vea los resultados
 
+def guardar_Diario():
+    #Guarda la lista global 'diario' en un archivo CSV."""
+    limpiar_consola() #Limpiamos primero la consola
+    
+    print("\033[96m" + "═" * 50 + "\033[0m")
+    print(" 💾 \033[1mGuardar Diario en archivo CSV\033[0m 💾")
+    print("\033[96m" + "═" * 50 + "\033[0m")
+
+    if not diario:
+        print("\n😔 No hay entradas para guardar. 😔")
+        pausar()
+        return
+
+    try:
+        nombre_archivo = "diario.csv"
+        with open(nombre_archivo, "w", newline="", encoding="utf-8") as archivo:
+            escritor = csv.writer(archivo)
+            escritor.writerows(diario)  # Guarda cada entrada como fila
+        print(f"\n✅ Diario guardado correctamente en '{nombre_archivo}' ✅")
+    except Exception as e:
+        print(f"❌ Error al guardar el diario: {e} ❌")
+
+    pausar()
+
+
+# ──────────────────────────────────────────────
+# Función para cargar el diario desde archivo CSV
+# ──────────────────────────────────────────────
+def cargar_diario_csv():
+    #Carga las entradas de 'diario.csv' en la lista global 'diario'.
+    limpiar_consola() #Limpiamos primero la consola
+    print("\033[96m" + "═" * 50 + "\033[0m")
+    print(" 📂 \033[1mCargar Diario desde archivo CSV\033[0m 📂")
+    print("\033[96m" + "═" * 50 + "\033[0m")
+
+    try:
+        nombre_archivo = "diario.csv"
+        with open(nombre_archivo, "r", newline="", encoding="utf-8") as archivo:
+            lector = csv.reader(archivo)
+            diario.clear()              # Limpia la lista actual
+            diario.extend(list(lector)) # Añade todas las filas leídas
+            
+            if diario:  # ✅ Solo mostramos si hay datos
+                print(f"\n✅ Diario cargado desde '{nombre_archivo}' ✅")
+                print("\n📖 Entradas recuperadas:\n")
+                ver_Diarios(pausar_despues=False)   # 👈 Muestra en pantalla
+            else:
+                print("\n⚠️ El archivo estaba vacío.")
+                
+    except FileNotFoundError:
+        print("❌ No se encontró el archivo 'diario.csv'. ❌")
+    except Exception as e:
+        print(f"❌ Error al cargar el diario: {e} ❌")
+
+    pausar()  
 # =====================================
 # Función principal que controla el flujo del programa
 # =====================================
