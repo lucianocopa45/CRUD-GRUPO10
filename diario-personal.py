@@ -69,4 +69,166 @@ def mostrar_menu():
         print(CYAN + char + RESET, end="", flush=True)  # Imprime cada guion con color cian
         time.sleep(0.010)  # Pausa breve
     print()  # Salto de línea al finalizar el separador
+
+#Funcion para crear Diario:
+def crear_Diario():
+    limpiar_consola() #Limpiamos la Consola antes de crear un nuevo Diario
+    print("➕  **Crear Nueva Diario del Diario** ➕")  
+    fecha = input("Fecha (DD-MM-AAAA): ")  # Solicitamos la fecha
+    titulo = input("Título: ")             # Solicitamos el título
+    entrada = input("Entrada: ")           # Solicitamos el contenido  
+    diario.append([fecha, titulo,entrada]) # Agregamos el contenido en la lista
+    print("\n✅ ¡Diario guardada exitosamente! ✅")
+    pausar()  # Pausamos para que el usuario vea el mensaje
+
+#Funcion para Ver el Diario:
+def ver_Diarios(pausar_despues=True):
+    limpiar_consola()  # Limpiamos la pantalla
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    print("📖  \033[1mTus Diarios\033[0m")
+    print("\033[96m" + "═" * 45 + "\033[0m")
     
+    if not diario:
+        print("\n😔 Aún no tienes Diarios en tu diario. ¡Añade una nueva! 😔")
+    else:
+        # Recorremos la lista con enumerate para mostrar índice y datos
+        for i,(fecha, titulo, entrada) in enumerate(diario,start=1):
+            print(f"\n\033[93mEntrada #{i}\033[0m")
+            print(f"🗓  Fecha : \033[92m{fecha}\033[0m")
+            print(f"📌 Título: \033[94m{titulo}\033[0m")
+            print("📜 Texto :")
+            print(f"    {entrada}")
+            print("\033[96m" + "-" * 45 + "\033[0m")
+    if pausar_despues:  # Pausamos solo si el parámetro lo indica
+        pausar()        
+
+#Funcion para seleccionar numero de Diario:
+def Seleccionar_Diario():
+    if not diario:  # Si la lista está vacía
+        print("\n😔 No hay Diarios disponibles. 😔")
+        pausar()
+        return None
+
+    # Mostramos los diarios sin pausar
+    ver_Diarios(pausar_despues=False)
+
+    try:
+        # Solicitamos número de Diario
+        num = int(input("\nIngresa el número del Diario: ")) - 1  
+
+        # Validamos que el índice esté dentro del rango
+        if 0 <= num < len(diario):
+            return num
+        else:
+            print("❌ Número de Diario no válido. ❌")
+            pausar()
+            return None
+
+    except ValueError:
+        # Si no se ingresa un número entero
+        print("❌ Entrada inválida. Por favor, ingresa un número. ❌")
+        pausar()
+        return None
+    
+#Funcion para actualizar el contenido de un Diario:
+def actualizar_Diario():
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    print(" ✏️ \033[1mActualizar Diario Existente\033[0m")
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    index= Seleccionar_Diario() #Obtenemos el indice del diario
+    if index is None:
+        return
+    diario_act = diario[index]   #Obtenemos el diario 
+    
+    #Lo mostramos en la consola:
+    print("\n\033[93m📖 Diario Seleccionado:\033[0m")
+    print("\033[92m🗓  Fecha :\033[0m", diario_act[0])
+    print("\033[94m📌 Título:\033[0m", diario_act[1])
+    print("\033[97m📝 Texto :\033[0m")
+    print("   " + diario_act[2])
+    print("\033[96m" + "─" * 45 + "\033[0m")
+    
+    # Pedimos nuevos datos; si el usuario deja vacío, se mantiene el original
+    nueva_fecha = input(f"Nueva Fecha ({diario_act[0]}): ") or diario_act[0]
+    nuevo_titulo = input(f"Nuevo Título ({diario_act[1]}): ") or diario_act[1]
+    nueva_Entrada = input(f"Nueva Diario ({diario_act[2]}): ") or diario_act[2]
+    
+    #Actualizamos el nuevo diario:
+    diario[index]=[nueva_fecha, nuevo_titulo, nueva_Entrada]
+    print("\n✅ ¡Diario actualizada exitosamente! ✅")
+    pausar()  # Pausamos para que el usuario vea el mensaje
+    
+#Funcion para Eiminar un Diario
+def eliminar_Diario():
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    print(" 🗑️ \033[1mEliminar Diario\033[0m")
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    index =Seleccionar_Diario()# Obtenemos el indice del diario a eliminar
+    if index is None:
+        return    
+    
+    Diario_eliminada = diario.pop(index)  # Eliminamos la Diario de la lista
+    print(f"\n✅ Diario '{Diario_eliminada[1]}' eliminada exitosamente. ✅")
+    pausar()  # Pausamos para que el usuario vea el mensaje
+    
+#Funcion para Buscar un diario por su Titulo:
+def buscar_Diario_PorTitulo():
+    limpiar_consola()
+    print("\033[96m" + "═" * 45 + "\033[0m")
+    print(" 🔍 \033[1mBuscar Diario por Titulo🔍\033[0m")
+    print("\033[96m" + "═" * 45 + "\033[0m")   
+    
+    if not diario:  # Si no hay Diarios, avisamos
+        print("\n😔 No hay Diarios para buscar. 😔")
+        pausar()
+        return
+    titulo_buscado = input("Ingrese el titulo o parte del titulo a buscar:").lower()
+    encontrados = [e for e in diario if titulo_buscado in e[1].lower()]  # Buscamos coincidencias
+    if encontrados:
+        print("\n✨ Diarios encontradas: ✨")
+        for i, Diario in enumerate(encontrados, start=1):
+            print(f"\nDiario #{i} | Fecha: {Diario[0]} | Título: {Diario[1]} | Diario: {Diario[2]}")
+    else:
+        print("\n😔 No se encontraron Diarios con ese criterio. 😔")
+    pausar()  # Pausamos para que el usuario vea los resultados
+
+# =====================================
+# Función principal que controla el flujo del programa
+# =====================================
+def main():
+    """
+    Controla el menú y mantiene el programa activo hasta que el usuario decida salir.
+    """
+    while True:  # Bucle infinito hasta que se elija salir
+        mostrar_menu()  # Mostramos el menú
+        opcion = input("Elige una opción: ")  # Solicitamos opción al usuario
+        
+        # Aquí se llaman las funciones correspondientes según la opción
+    # Usando match/case para controlar opciones
+        match opcion:
+            case '1':
+                crear_Diario()
+            case '2':
+                ver_Diarios()
+            case '3':
+                actualizar_Diario()
+            case '4':
+                eliminar_Diario()
+            case '5':
+                buscar_Diario_PorTitulo()
+            case '6':
+                guardar_Diario()
+            case '7':
+                cargar_diario_csv()
+            case '8':  # Salir
+                print("¡Hasta luego! 👋")
+                break
+            case _:  # Caso por defecto si no coincide ninguna opción
+                print("Opción inválida, intenta nuevamente.")
+                input("Presiona Enter para continuar...")
+
+
+
+# Bloque principal que ejecuta el menú si este archivo se corre directamente
+if __name__ == "__main__":
+    main()    
