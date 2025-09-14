@@ -171,6 +171,12 @@ def eliminar_Diario():
     print(f"\n✅ Diario '{Diario_eliminada[1]}' eliminada exitosamente. ✅")
     pausar()  # Pausamos para que el usuario vea el mensaje
     
+def salir():
+       print("\033[96m" + "═" * 45 + "\033[0m")
+       print(" 👋 \033[1m¡Hasta luego!\033[0m")
+       print("\033[96m" + "═" * 45 + "\033[0m")
+      
+    
 #Funcion para Buscar un diario por su Titulo:
 def buscar_Diario_PorTitulo():
     limpiar_consola()
@@ -276,7 +282,7 @@ def main():
             case '7':
                 cargar_diario_csv()
             case '8':  # Salir
-                print("¡Hasta luego! 👋")
+                salir()
                 break
             case _:  # Caso por defecto si no coincide ninguna opción
                 print("Opción inválida, intenta nuevamente.")
