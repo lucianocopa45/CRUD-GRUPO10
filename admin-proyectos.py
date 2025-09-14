@@ -169,6 +169,38 @@ while True:
             print(datos)  # Mostramos el proyecto actualizado
 
             input("\nPresiona ENTER para continuar...")
+            
+        case "4":
+            if len(proyecto) == 0:
+                print("No hay proyectos registrados")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            
+            eliminarProyecto = input("Ingrese nombre de proyecto a eliminar: ").strip()
+            
+            if eliminarProyecto not in proyecto:
+                print(" El proyecto no existe en la agenda.")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            # Recuperamos los datos actuales del proyecto
+            datos = proyecto[eliminarProyecto]
+            
+            # Mostramos la información actual del proyecto
+            print(f"\n Datos actuales del proyecto '{eliminarProyecto}':")
+            print(f"- Responsable: {datos['nombreResponsable']}")
+            print(f"- Estado: {datos['estado']}")
+            print(f"- Avance: {datos['avance']}%")
+            print(datos)  # Muestra el diccionario completo (útil para depuración)
+            input("\nPresiona ENTER para continuar...")
+            
+            opcionEliminar = input(f"\n¿Seguro que desea eliminar? \n1.- Sí \n2.- No \nElegir: ").strip()
+            
+            if opcionEliminar == "1":
+                    proyecto.pop(eliminarProyecto)
+                    print("\nProyecto eliminado correctamente")
+            else:
+                        print("\nOperación cancelada.")
+            input("\nPresiona ENTER para continuar...")
         case _:
             # Caso por defecto: cuando la opción no coincide con ninguna válida
             print("Opción NO válida. Intente nuevamente")
