@@ -1,7 +1,12 @@
 {
-    "c": {
-        "nombreResponsable": "rgtr",
+    "Sistema Ventas": {
+        "nombreResponsable": "Juan Pérez",
+        "estado": "En progreso",
+        "avance": 60
+    },
+    "App Móvil": {
+        "nombreResponsable": "Ana Gómez",
         "estado": "Pendiente",
-        "avance": 10
+        "avance": 20
     }
 }
