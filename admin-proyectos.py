@@ -92,7 +92,6 @@ while True:
                 
                 # Recorremos todos los proyectos del diccionario
                 for nombreProyecto, datos in proyecto.items():
-                    print(datos)
                     # Obtenemos el avance como número (quitando el "%")
                     convertAvance = datos["avance"]
                     avance_num = int(convertAvance)
@@ -107,7 +106,7 @@ while True:
                         f"Avance logrado: [{barra}] {avance_num}%")
                     i += 1 # Incrementa el contador de proyectos
                     # Pausa para que el usuario pueda leer la información
-                    input("\nPresiona ENTER para continuar...")
+                input("\nPresiona ENTER para continuar...")
         case "3":
             # Caso 3: Actualizar un proyecto creado por su nombre
             print("Usted selecciono la opcion: ", opcion)
@@ -134,16 +133,22 @@ while True:
             print(f"- Responsable: {datos['nombreResponsable']}")
             print(f"- Estado: {datos['estado']}")
             print(f"- Avance: {datos['avance']}%")
-            print(datos)  # Muestra el diccionario completo (útil para depuración)
             input("\nPresiona ENTER para continuar...")
             
-            # Actualizar nombre del responsable (opcional, se mantiene si presiona ENTER)
-            newNombreResponsable = input("Ingrese nuevo nombre del responsable (de no ser asi, ENTER)").strip()
+            #Actualizar nombre del proyecto si lo desea
+            newNombreProyecto = input("Ingrese nuevo nombre del proyecto (de no ser asi, ENTER): ").strip()
+            if newNombreProyecto:
+                # Borramos la clave antigua y asignamos la nueva
+                proyecto[newNombreProyecto] = proyecto.pop(nombreProyecto)
+                nombreProyecto = newNombreProyecto  # Actualizamos el nombre actual
+                datos = proyecto[nombreProyecto]    # Referencia al diccionario actualizado
+            # Actualizar nombre del responsable si lo desea
+            newNombreResponsable = input("Ingrese nuevo nombre del responsable (de no ser asi, ENTER): ").strip()
             if newNombreResponsable:
                 datos['nombreResponsable'] = newNombreResponsable
                 
             # Actualizar estado del proyecto                
-            newEstado = input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()             
+            newEstado = input("\nTipo de estado (de no ser asi, ENTER): \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()             
             
             # Validamos que el estado ingresado sea correcto                        
             if newEstado:# Solo si ingresó algo
@@ -154,7 +159,7 @@ while True:
                 datos['estado'] = newEstado
                 
             # Actualizar avance del proyecto
-            newAvance = input("Ingrese el avance logrado: ").strip()
+            newAvance = input("Ingrese el avance logrado (de no ser asi, ENTER): ").strip()
             if newAvance:
                 if newAvance.isdigit() and 0 <= int(newAvance) <= 100:
                     datos["avance"] = int(newAvance) # Guardamos como porcentaje para mantener consistencia
@@ -203,7 +208,7 @@ while True:
             input("\nPresiona ENTER para continuar...")
         case "5":
             
-            if len(proyecto == 0):
+            if len(proyecto) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
@@ -230,6 +235,30 @@ while True:
                 except Exception as e:
                     print(f"Error al guardar: {e}")
                     input("\nPresiona ENTER para continuar...")
+        case "7":
+                try:
+                    with open("proyecto.json", "r", encoding="utf-8") as f:
+                        proyecto = json.load(f)
+                    print("\nAgenda recuperada correctamente desde 'proyecto.json'")
+                    
+                            # Mostrar todos los proyectos recuperados
+                    if len(proyecto) == 0:
+                        print("La agenda está vacía.")
+                    else:
+                        print("\nProyectos en la agenda:")
+                    for nombre, datos in proyecto.items():
+                        print(f"\n- Proyecto: {nombre}")
+                        print(f"  Responsable: {datos['nombreResponsable']}")
+                        print(f"  Estado: {datos['estado']}")
+                        print(f"  Avance: {datos['avance']}%")
+                        
+                except FileNotFoundError:
+                    print("No existe un archivo 'proyecto.json'. Guarde el proyecto primero.")
+                except json.JSONDecodeError:
+                    print("El archivo 'proyecto.json' está dañado o vacío.")
+                except Exception as e:
+                    print(f"Error al recuperar: {e}")
+                input("\nPresiona ENTER para continuar...")            
         case _:
             # Caso por defecto: cuando la opción no coincide con ninguna válida
             print("Opción NO válida. Intente nuevamente")
