@@ -176,72 +176,86 @@ while True:
             input("\nPresiona ENTER para continuar...")
             
         case "4":
+            # Caso 4: Eliminar un proyecto
+            # Primero validamos si hay proyectos
             if len(proyecto) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
+            # Pedimos el nombre del proyecto a eliminar
             eliminarProyecto = input("Ingrese nombre de proyecto a eliminar: ").strip()
             
+            # Verificamos que exista
             if eliminarProyecto not in proyecto:
                 print(" El proyecto no existe en la agenda.")
                 input("\nPresiona ENTER para continuar...")
                 continue
-            # Recuperamos los datos actuales del proyecto
+            # Recuperamos los datos actuales para mostrarlos antes de eliminar
             datos = proyecto[eliminarProyecto]
             
-            # Mostramos la información actual del proyecto
+            # Mostramos información del proyecto seleccionado
             print(f"\n Datos actuales del proyecto '{eliminarProyecto}':")
             print(f"- Responsable: {datos['nombreResponsable']}")
             print(f"- Estado: {datos['estado']}")
             print(f"- Avance: {datos['avance']}%")
-            print(datos)  # Muestra el diccionario completo (útil para depuración)
             input("\nPresiona ENTER para continuar...")
             
+            # Confirmación antes de eliminar
             opcionEliminar = input(f"\n¿Seguro que desea eliminar? \n1.- Sí \n2.- No \nElegir: ").strip()
             
-            if opcionEliminar == "1":
-                    proyecto.pop(eliminarProyecto)
+            if opcionEliminar == "1": # Si confirma con 1
+                    proyecto.pop(eliminarProyecto) # Eliminamos del diccionario
                     print("\nProyecto eliminado correctamente")
-            else:
+            else: # Si no, cancelamos
                         print("\nOperación cancelada.")
             input("\nPresiona ENTER para continuar...")
         case "5":
-            
+            # Caso 5: Buscar un proyecto
+            # Validamos que haya proyectos
             if len(proyecto) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
+            # Pedimos el nombre del proyecto a buscar
             buscarProyecto = input("\n Ingrese nombre de proyecto a buscar: ")
             
+            # Validamos si existe en la agenda
             if buscarProyecto not in proyecto:
                 print(" El proyecto no existe en la agenda.")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
+            # Recuperamos los datos del proyecto encontrado
             datosBuscar = proyecto[buscarProyecto]
             
+            # Mostramos la información del proyecto
             print(f"\n Nombre del proyecto: {buscarProyecto} \n Nombre del responsable: {datosBuscar['nombreResponsable']} \n Estado: {datosBuscar['estado']} \n Avance: {datosBuscar['avance']}%")
         case "6":
-            if len(proyecto) == 0:
+            # Caso 6: Guardar todos los proyectos en un archivo JSON
+            if len(proyecto) == 0:  # Si no hay proyectos, no se guarda nada
                 print("No hay proyectos para guardar.")
             else:
                 try:
+                    # Abrimos/creamos el archivo en modo escritura
                     with open("proyecto.json", "w", encoding="utf-8") as f:
+                        # Guardamos el diccionario en formato JSON
                         json.dump(proyecto, f, indent=4, ensure_ascii=False)
                     print("\nAgenda guardada correctamente en 'proyecto.json'")
                     input("\nPresiona ENTER para continuar...")
-                except Exception as e:
+                except Exception as e: # Si ocurre algún error, lo mostramos
                     print(f"Error al guardar: {e}")
                     input("\nPresiona ENTER para continuar...")
         case "7":
+                # Caso 7: Recuperar los proyectos desde un archivo JSON
                 try:
+                    # Abrimos el archivo en modo lectura
                     with open("proyecto.json", "r", encoding="utf-8") as f:
-                        proyecto = json.load(f)
+                        proyecto = json.load(f)  # Cargamos el contenido a la variable proyecto
                     print("\nAgenda recuperada correctamente desde 'proyecto.json'")
                     
-                            # Mostrar todos los proyectos recuperados
+                    # Mostrar todos los proyectos recuperados
                     if len(proyecto) == 0:
                         print("La agenda está vacía.")
                     else:
@@ -253,18 +267,22 @@ while True:
                         print(f"  Avance: {datos['avance']}%")
                         
                 except FileNotFoundError:
+                    # Error si el archivo no existe todavía
                     print("No existe un archivo 'proyecto.json'. Guarde el proyecto primero.")
                 except json.JSONDecodeError:
+                    # Error si el archivo existe pero está vacío o dañado
                     print("El archivo 'proyecto.json' está dañado o vacío.")
                 except Exception as e:
+                    # Otros errores genéricos
                     print(f"Error al recuperar: {e}")
                 input("\nPresiona ENTER para continuar...")
         case "8":
+            # Caso 8: Salir del programa
             print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
             salir = input("Escriba [s] para salir o [n] para volver al menú: ").strip().lower()
-            if salir == "s":
+            if salir == "s": # Confirmación para salir
                 print("\n Gracias por usar la Agenda de Proyectos. ¡Hasta luego!\n")
-                break
+                break # Se rompe el bucle principal y termina el programa
             else :
                 print("\nVolviendo al menú principal...")
                 input("Presiona ENTER para continuar...")
