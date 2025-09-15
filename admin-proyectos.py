@@ -218,16 +218,18 @@ while True:
             datosBuscar = proyecto[buscarProyecto]
             
             print(f"\n Nombre del proyecto: {buscarProyecto} \n Nombre del responsable: {datosBuscar['nombreResponsable']} \n Estado: {datosBuscar['estado']} \n Avance: {datosBuscar['avance']}%")
-            
-        case "8":
-            print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
-            salir = input("Escriba [s] para salir o [n] para volver al menú: ").strip().lower()
-            if salir == "s":
-                print("\n Gracias por usar la Agenda de Proyectos. ¡Hasta luego!\n")
-                break
-            else :
-                print("\nVolviendo al menú principal...")
-                input("Presiona ENTER para continuar...")
+        case "6":
+            if len(proyecto) == 0:
+                print("No hay proyectos para guardar.")
+            else:
+                try:
+                    with open("proyecto.json", "w", encoding="utf-8") as f:
+                        json.dump(proyecto, f, indent=4, ensure_ascii=False)
+                    print("\nAgenda guardada correctamente en 'proyecto.json'")
+                    input("\nPresiona ENTER para continuar...")
+                except Exception as e:
+                    print(f"Error al guardar: {e}")
+                    input("\nPresiona ENTER para continuar...")
         case _:
             # Caso por defecto: cuando la opción no coincide con ninguna válida
             print("Opción NO válida. Intente nuevamente")
