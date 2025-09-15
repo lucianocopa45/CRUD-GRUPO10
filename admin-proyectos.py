@@ -125,10 +125,10 @@ while True:
                 print(" El proyecto no existe en la agenda.")
                 input("\nPresiona ENTER para continuar...")
                 continue
-                        # Recuperamos los datos actuales del proyecto
+            # Recuperamos los datos actuales del proyecto
             datos = proyecto[nombreProyecto]
             
-                        # Mostramos la información actual del proyecto
+            # Mostramos la información actual del proyecto
             print(f"\n Datos actuales del proyecto '{nombreProyecto}':")
             print(f"- Responsable: {datos['nombreResponsable']}")
             print(f"- Estado: {datos['estado']}")
@@ -258,7 +258,16 @@ while True:
                     print("El archivo 'proyecto.json' está dañado o vacío.")
                 except Exception as e:
                     print(f"Error al recuperar: {e}")
-                input("\nPresiona ENTER para continuar...")            
+                input("\nPresiona ENTER para continuar...")
+        case "8":
+            print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
+            salir = input("Escriba [s] para salir o [n] para volver al menú: ").strip().lower()
+            if salir == "s":
+                print("\n Gracias por usar la Agenda de Proyectos. ¡Hasta luego!\n")
+                break
+            else :
+                print("\nVolviendo al menú principal...")
+                input("Presiona ENTER para continuar...")
         case _:
             # Caso por defecto: cuando la opción no coincide con ninguna válida
             print("Opción NO válida. Intente nuevamente")
