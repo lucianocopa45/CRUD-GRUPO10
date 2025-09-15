@@ -1,12 +1,14 @@
-{
-    "Sistema Ventas": {
-        "nombreResponsable": "Juan Pérez",
-        "estado": "En progreso",
-        "avance": 60
-    },
-    "App Móvil": {
-        "nombreResponsable": "Ana Gómez",
-        "estado": "Pendiente",
-        "avance": 20
-    }
-}
+[
+    [
+        "Sistema Ventas",
+        "Juan Pérez",
+        "En progreso",
+        60
+    ],
+    [
+        "App Móvil",
+        "Ana Gómez",
+        "Pendiente",
+        20
+    ]
+]

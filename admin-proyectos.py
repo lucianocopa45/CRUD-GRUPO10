@@ -1,21 +1,22 @@
 # Importamos librerías necesarias
-import os      # Sirve para interactuar con el sistema operativo (ej: limpiar la consola).
-import json    # Sirve para trabajar con archivos JSON (guardar y recuperar proyectos).
+import os   # Para interactuar con el sistema operativo (ej: limpiar la consola)
+import json # Para guardar y recuperar la agenda de proyectos en formato JSON
 
-# Variable que almacena la opción elegida del menú.
-# Comienza como cadena vacía y se actualiza con cada input del usuario.
-opcion = ''
-# Diccionario donde se van a almacenar todos los proyectos creados.
-# Estructura: { nombreProyecto: { "nombreResponsable": str, "estado": str, "avance": str } }
-proyecto = {}
+# Lista principal que almacena todos los proyectos
+# Cada proyecto es una lista con 4 elementos: [nombreProyecto, nombreResponsable, estado, avance]
+proyectos = []
 
+# Variable para confirmar salida del programa
 salir = ''
 
-# Bucle principal: se repite mientras la opción no sea "8" (que significa salir).
-while True:
-    os.system('cls')  # Limpiar la consola (solo Windows)
+# Diccionario para mapear números a estados del proyecto
+estados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
 
-    # Mostrar las opciones del menú
+# Bucle principal del programa: se ejecuta hasta que el usuario decida salir
+while True:
+    os.system('cls')  # Limpiar la consola en Windows
+
+    # Mostrar el menú principal
     print(" Agenda de proyectos")
     print("1.- Crear proyecto")
     print("2.- Leer proyectos")
@@ -26,267 +27,213 @@ while True:
     print("7.- Recuperar agenda desde JSON")
     print("8.- Salir")
     
-    # Pedir al usuario que ingrese una opción
-    opcion = input("\nElegir una opcion: ")
+    # Pedimos al usuario que elija una opción
+    opcion = input("\nElegir una opcion: ").strip()
     
-    # match-case permite ejecutar un bloque de código dependiendo de la opción seleccionada.
+    # match-case permite ejecutar un bloque según la opción elegida
     match opcion:
         case "1":
-            # Caso 1: Crear un nuevo proyecto
-            print("Usted selecciono la opcion: ", opcion)
+            # --- CREAR PROYECTO ---
+            print("Usted seleccionó la opción: ", opcion)
             
-            # Se pide el nombre del proyecto
+            # Solicitar nombre del proyecto y validar que no esté vacío
             nombreProyecto = input("\nIngrese nombre del proyecto: ").strip()
-            if not nombreProyecto: # Validación: no puede estar vacío
-                print("EL nombre no puede estar vacio")
-                input("\nPresiona ENTER para continuar...")
-                continue # Vuelve al inicio del bucle
-            
-            # Se pide el nombre del responsable del proyecto
-            nombreResponsable = input("\nIngrese el nombre del responsable:").strip()
-            if not nombreResponsable: # Validación: no puede estar vacío
-                print("EL nombre del responsable no puede estar vacio")
+            if not nombreProyecto:
+                print("El nombre no puede estar vacío")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
-            # Se pide el estado del proyecto
+            # Solicitar nombre del responsable y validar
+            nombreResponsable = input("\nIngrese el nombre del responsable: ").strip()
+            if not nombreResponsable:
+                print("El nombre del responsable no puede estar vacío")
+                input("\nPresiona ENTER para continuar...")
+                continue
+            
+            # Solicitar estado mediante número (1-3)
             estado = input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()
             
-            # Diccionario que mapea números a estados válidos
-            estados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
-
-            # Validar que el estado ingresado esté dentro de las opciones
+            # Validar estado ingresado
             if estado not in ["1", "2", "3"]:
                 print("Estado inválido")
                 input("\nPresiona ENTER para continuar...")
                 continue
-            estado = estados_validos[estado] # Se reemplaza el número por el texto correspondiente
-
-            # Se pide el avance del proyecto en porcentaje (0 a 100)
-            avance = input("Ingrese el avance logrado: ").strip()
+            # Convertir número a texto
+            estado = estados_validos[estado]
             
-            # Validamos que sea un número y esté en el rango 0 a 100
+            # Solicitar avance del proyecto (0-100)
+            avance = input("Ingrese el avance logrado (0-100): ").strip()
             if not avance.isdigit() or not (0 <= int(avance) <= 100):
-                print("EL avance no puede estar vacio")
+                print("Avance inválido")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
-            # Se guarda el proyecto en el diccionario principal "proyecto"
-            proyecto[nombreProyecto] = {
-                "nombreResponsable": nombreResponsable, # Responsable del proyecto
-                "estado": estado,  # Estado actual
-                'avance': int(avance)} # Avance en formato texto con "%"
+            # Guardamos el proyecto como una lista en la lista principal
+            proyectos.append([nombreProyecto, nombreResponsable, estado, int(avance)])
             
-            # Pausa para que el usuario vea el resultado antes de volver al menú
             input("\nPresiona ENTER para continuar...")
+        
         case "2":
-            # Caso 2: Mostrar todos los proyectos creados
-            print("Usted selecciono la opcion: ", opcion)
-                        
-            # Verificamos si hay proyectos en el diccionario
-            if len(proyecto) == 0:
-                print("No hay proyectos registrados")
-                input("\nPresiona ENTER para continuar...")
-            else:
-                i=1 # Contador para enumerar los proyectos
-                
-                # Recorremos todos los proyectos del diccionario
-                for nombreProyecto, datos in proyecto.items():
-                    # Obtenemos el avance como número (quitando el "%")
-                    convertAvance = datos["avance"]
-                    avance_num = int(convertAvance)
-                    
-                    # Creamos una barra de progreso de 10 bloques
-                    barra = "█" * (avance_num // 10) + "-" * (10 - avance_num // 10)
-                    
-                    # Mostramos la información del proyecto
-                    print(i, ".-", "Nombre del proyecto:", nombreProyecto, 
-                        "- Nombre del responsable:", datos["nombreResponsable"], 
-                        "- Estado:", datos["estado"],
-                        f"Avance logrado: [{barra}] {avance_num}%")
-                    i += 1 # Incrementa el contador de proyectos
-                    # Pausa para que el usuario pueda leer la información
-                input("\nPresiona ENTER para continuar...")
-        case "3":
-            # Caso 3: Actualizar un proyecto creado por su nombre
-            print("Usted selecciono la opcion: ", opcion)
+            # --- LEER PROYECTOS ---
+            print("Usted seleccionó la opción: ", opcion)
             
-            # Verificamos si hay proyectos en la agenda
-            if len(proyecto) == 0:
+            if len(proyectos) == 0:
+                print("No hay proyectos registrados")
+            else:
+                # Recorremos la lista de proyectos y mostramos cada uno
+                for i, proj in enumerate(proyectos, start=1):
+                    nombreProyecto, nombreResponsable, estado, avance = proj
+                    # Creamos una barra de progreso visual de 10 bloques
+                    barra = "█" * (avance // 10) + "-" * (10 - avance // 10)
+                    # Mostramos toda la información
+                    print(f"{i} .- Nombre: {nombreProyecto} - Responsable: {nombreResponsable} - Estado: {estado} - Avance: [{barra}] {avance}%")
+            
+            input("\nPresiona ENTER para continuar...")
+        
+        case "3":
+            # --- ACTUALIZAR PROYECTO ---
+            print("Usted seleccionó la opción: ", opcion)
+            
+            if len(proyectos) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
-            # Pedimos el nombre del proyecto a actualizar                                    
+            # Solicitar nombre del proyecto a actualizar
             nombreProyecto = input("\nIngrese el nombre del proyecto a actualizar: ").strip()
             
-            # Validamos si el proyecto existe
-            if nombreProyecto not in proyecto:
-                print(" El proyecto no existe en la agenda.")
+            # Buscar el proyecto en la lista usando enumerate y next
+            # Esto devuelve el índice del proyecto o None si no existe
+            index = next((i for i, p in enumerate(proyectos) if p[0] == nombreProyecto), None)
+            if index is None:
+                print("El proyecto no existe")
                 input("\nPresiona ENTER para continuar...")
                 continue
-            # Recuperamos los datos actuales del proyecto
-            datos = proyecto[nombreProyecto]
             
-            # Mostramos la información actual del proyecto
-            print(f"\n Datos actuales del proyecto '{nombreProyecto}':")
-            print(f"- Responsable: {datos['nombreResponsable']}")
-            print(f"- Estado: {datos['estado']}")
-            print(f"- Avance: {datos['avance']}%")
-            input("\nPresiona ENTER para continuar...")
+            proj = proyectos[index]  # Obtenemos la lista del proyecto
             
-            #Actualizar nombre del proyecto si lo desea
-            newNombreProyecto = input("Ingrese nuevo nombre del proyecto (de no ser asi, ENTER): ").strip()
-            if newNombreProyecto:
-                # Borramos la clave antigua y asignamos la nueva
-                proyecto[newNombreProyecto] = proyecto.pop(nombreProyecto)
-                nombreProyecto = newNombreProyecto  # Actualizamos el nombre actual
-                datos = proyecto[nombreProyecto]    # Referencia al diccionario actualizado
-            # Actualizar nombre del responsable si lo desea
-            newNombreResponsable = input("Ingrese nuevo nombre del responsable (de no ser asi, ENTER): ").strip()
-            if newNombreResponsable:
-                datos['nombreResponsable'] = newNombreResponsable
-                
-            # Actualizar estado del proyecto                
-            newEstado = input("\nTipo de estado (de no ser asi, ENTER): \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()             
+            # Mostrar datos actuales
+            print(f"\nDatos actuales: Nombre: {proj[0]}, Responsable: {proj[1]}, Estado: {proj[2]}, Avance: {proj[3]}%")
             
-            # Validamos que el estado ingresado sea correcto                        
-            if newEstado:# Solo si ingresó algo
-                newEstados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
+            # --- Actualización de campos ---
+            # Actualizar nombre
+            newNombre = input("Nuevo nombre (ENTER para no cambiar): ").strip()
+            if newNombre:
+                proj[0] = newNombre
             
-                newEstado = newEstados_validos[newEstado]
-                
-                datos['estado'] = newEstado
-                
-            # Actualizar avance del proyecto
-            newAvance = input("Ingrese el avance logrado (de no ser asi, ENTER): ").strip()
+            # Actualizar responsable
+            newResponsable = input("Nuevo responsable (ENTER para no cambiar): ").strip()
+            if newResponsable:
+                proj[1] = newResponsable
+            
+            # Actualizar estado
+            newEstado = input("Nuevo estado (1-Pendiente, 2-En progreso, 3-Finalizado, ENTER para no cambiar): ").strip()
+            if newEstado:
+                proj[2] = estados_validos.get(newEstado, proj[2]) # Si el número es inválido, se mantiene el estado anterior
+            
+            # Actualizar avance
+            newAvance = input("Nuevo avance (0-100, ENTER para no cambiar): ").strip()
             if newAvance:
                 if newAvance.isdigit() and 0 <= int(newAvance) <= 100:
-                    datos["avance"] = int(newAvance) # Guardamos como porcentaje para mantener consistencia
+                    proj[3] = int(newAvance)
                 else:
                     print("Avance inválido. Se mantiene el anterior.")
-                    
-            # Guardamos los cambios en el diccionario principal                    
-            proyecto[nombreProyecto] = datos
             
-            # Confirmación de actualización
-            print("\nProyecto actualizado con éxito.")
-            print(datos)  # Mostramos el proyecto actualizado
-
+            # Guardamos los cambios
+            proyectos[index] = proj
+            print("\nProyecto actualizado con éxito")
             input("\nPresiona ENTER para continuar...")
-            
+        
         case "4":
-            # Caso 4: Eliminar un proyecto
-            # Primero validamos si hay proyectos
-            if len(proyecto) == 0:
+            # --- ELIMINAR PROYECTO ---
+            if len(proyectos) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
-            # Pedimos el nombre del proyecto a eliminar
-            eliminarProyecto = input("Ingrese nombre de proyecto a eliminar: ").strip()
+            nombreProyecto = input("Ingrese nombre del proyecto a eliminar: ").strip()
             
-            # Verificamos que exista
-            if eliminarProyecto not in proyecto:
-                print(" El proyecto no existe en la agenda.")
+            # Buscamos el proyecto por nombre
+            index = next((i for i, p in enumerate(proyectos) if p[0] == nombreProyecto), None)
+            if index is None:
+                print("El proyecto no existe")
                 input("\nPresiona ENTER para continuar...")
                 continue
-            # Recuperamos los datos actuales para mostrarlos antes de eliminar
-            datos = proyecto[eliminarProyecto]
             
-            # Mostramos información del proyecto seleccionado
-            print(f"\n Datos actuales del proyecto '{eliminarProyecto}':")
-            print(f"- Responsable: {datos['nombreResponsable']}")
-            print(f"- Estado: {datos['estado']}")
-            print(f"- Avance: {datos['avance']}%")
+            # Mostrar datos antes de eliminar
+            print(f"\nProyecto: {proyectos[index][0]} - Responsable: {proyectos[index][1]} - Estado: {proyectos[index][2]} - Avance: {proyectos[index][3]}%")
+            
+            # Confirmación de eliminación
+            confirm = input("¿Seguro que desea eliminar? (s/n): ").strip().lower()
+            if confirm == 's':
+                proyectos.pop(index)  # Eliminamos el proyecto de la lista
+                print("Proyecto eliminado")
+            else:
+                print("Operación cancelada")
             input("\nPresiona ENTER para continuar...")
-            
-            # Confirmación antes de eliminar
-            opcionEliminar = input(f"\n¿Seguro que desea eliminar? \n1.- Sí \n2.- No \nElegir: ").strip()
-            
-            if opcionEliminar == "1": # Si confirma con 1
-                    proyecto.pop(eliminarProyecto) # Eliminamos del diccionario
-                    print("\nProyecto eliminado correctamente")
-            else: # Si no, cancelamos
-                        print("\nOperación cancelada.")
-            input("\nPresiona ENTER para continuar...")
+        
         case "5":
-            # Caso 5: Buscar un proyecto
-            # Validamos que haya proyectos
-            if len(proyecto) == 0:
+            # --- BUSCAR PROYECTO ---
+            if len(proyectos) == 0:
                 print("No hay proyectos registrados")
                 input("\nPresiona ENTER para continuar...")
                 continue
             
-            # Pedimos el nombre del proyecto a buscar
-            buscarProyecto = input("\n Ingrese nombre de proyecto a buscar: ")
-            
-            # Validamos si existe en la agenda
-            if buscarProyecto not in proyecto:
-                print(" El proyecto no existe en la agenda.")
-                input("\nPresiona ENTER para continuar...")
-                continue
-            
-            # Recuperamos los datos del proyecto encontrado
-            datosBuscar = proyecto[buscarProyecto]
-            
-            # Mostramos la información del proyecto
-            print(f"\n Nombre del proyecto: {buscarProyecto} \n Nombre del responsable: {datosBuscar['nombreResponsable']} \n Estado: {datosBuscar['estado']} \n Avance: {datosBuscar['avance']}%")
+            nombreProyecto = input("Ingrese nombre del proyecto a buscar: ").strip()
+            # Buscamos el proyecto y obtenemos la lista si existe
+            proj = next((p for p in proyectos if p[0] == nombreProyecto), None)
+            if proj is None:
+                print("El proyecto no existe")
+            else:
+                print(f"\nNombre: {proj[0]} - Responsable: {proj[1]} - Estado: {proj[2]} - Avance: {proj[3]}%")            
+            input("\nPresiona ENTER para continuar...")
+        
         case "6":
-            # Caso 6: Guardar todos los proyectos en un archivo JSON
-            if len(proyecto) == 0:  # Si no hay proyectos, no se guarda nada
-                print("No hay proyectos para guardar.")
+            # --- GUARDAR A JSON ---
+            if len(proyectos) == 0:
+                print("No hay proyectos para guardar")
             else:
                 try:
-                    # Abrimos/creamos el archivo en modo escritura
                     with open("proyecto.json", "w", encoding="utf-8") as f:
-                        # Guardamos el diccionario en formato JSON
-                        json.dump(proyecto, f, indent=4, ensure_ascii=False)
-                    print("\nAgenda guardada correctamente en 'proyecto.json'")
-                    input("\nPresiona ENTER para continuar...")
-                except Exception as e: # Si ocurre algún error, lo mostramos
-                    print(f"Error al guardar: {e}")
-                    input("\nPresiona ENTER para continuar...")
-        case "7":
-                # Caso 7: Recuperar los proyectos desde un archivo JSON
-                try:
-                    # Abrimos el archivo en modo lectura
-                    with open("proyecto.json", "r", encoding="utf-8") as f:
-                        proyecto = json.load(f)  # Cargamos el contenido a la variable proyecto
-                    print("\nAgenda recuperada correctamente desde 'proyecto.json'")
-                    
-                    # Mostrar todos los proyectos recuperados
-                    if len(proyecto) == 0:
-                        print("La agenda está vacía.")
-                    else:
-                        print("\nProyectos en la agenda:")
-                    for nombre, datos in proyecto.items():
-                        print(f"\n- Proyecto: {nombre}")
-                        print(f"  Responsable: {datos['nombreResponsable']}")
-                        print(f"  Estado: {datos['estado']}")
-                        print(f"  Avance: {datos['avance']}%")
-                        
-                except FileNotFoundError:
-                    # Error si el archivo no existe todavía
-                    print("No existe un archivo 'proyecto.json'. Guarde el proyecto primero.")
-                except json.JSONDecodeError:
-                    # Error si el archivo existe pero está vacío o dañado
-                    print("El archivo 'proyecto.json' está dañado o vacío.")
+                        json.dump(proyectos, f, indent=4, ensure_ascii=False)
+                    print("Agenda guardada correctamente")
                 except Exception as e:
-                    # Otros errores genéricos
-                    print(f"Error al recuperar: {e}")
-                input("\nPresiona ENTER para continuar...")
+                    print(f"Error al guardar: {e}")
+            input("\nPresiona ENTER para continuar...")
+        
+        case "7":
+            # --- RECUPERAR DE JSON ---
+            try:
+                with open("proyecto.json", "r", encoding="utf-8") as f:
+                    proyectos = json.load(f)  # Cargamos la lista de proyectos
+                print("Agenda recuperada correctamente")
+                if len(proyectos) == 0:
+                    print("La agenda está vacía")
+                else:
+                    # Mostrar todos los proyectos cargados
+                    for proj in proyectos:
+                        print(f"\nNombre: {proj[0]} - Responsable: {proj[1]} - Estado: {proj[2]} - Avance: {proj[3]}%")
+            except FileNotFoundError:
+                print("No existe un archivo 'proyecto.json'. Guarde primero.")
+            except json.JSONDecodeError:
+                print("El archivo está dañado o vacío")
+            except Exception as e:
+                print(f"Error al recuperar: {e}")
+            
+            input("\nPresiona ENTER para continuar...")
+        
         case "8":
-            # Caso 8: Salir del programa
+            # --- SALIR DEL PROGRAMA ---
             print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
             salir = input("Escriba [s] para salir o [n] para volver al menú: ").strip().lower()
-            if salir == "s": # Confirmación para salir
-                print("\n Gracias por usar la Agenda de Proyectos. ¡Hasta luego!\n")
-                break # Se rompe el bucle principal y termina el programa
-            else :
-                print("\nVolviendo al menú principal...")
+            if salir == "s":
+                print("\nGracias por usar la Agenda de Proyectos. ¡Hasta luego!")
+                break
+            else:
+                print("\nVolviendo al menú...")
                 input("Presiona ENTER para continuar...")
+        
         case _:
-            # Caso por defecto: cuando la opción no coincide con ninguna válida
-            print("Opción NO válida. Intente nuevamente")
-            input("Presione ENTER para continuar ...")
+            # Opción no válida
+            print("Opción no válida")
+            input("Presiona ENTER para continuar...")
