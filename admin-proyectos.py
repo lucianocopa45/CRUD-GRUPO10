@@ -236,4 +236,8 @@ while True:
         case _:
             # Opción no válida
             print("Opción no válida")
+
             input("Presiona ENTER para continuar...")
+
+
+
