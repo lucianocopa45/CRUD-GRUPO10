@@ -374,11 +374,9 @@ def submenu_graficos():
                 grafico_torta()
             case '4':
                 grafico_histograma()
-            #case '5':
-                #mostrar_todos_graficos()
-            #case '6':
-                #generar_reporte()
-            case '7':
+            case '5':
+                mostrar_todos_graficos()
+            case '6':
                 break
             case _:
                 print("❌ Opción inválida")
@@ -457,6 +455,40 @@ def grafico_histograma():
     matp.tight_layout()
     matp.show()   
     
+    
+#Funcion que muestra todos los graficos como un grid de 2x2
+def mostrar_todos_graficos():
+    df = cargar_datos_diario()
+    if df.empty:
+        print("⚠️ No hay datos para graficar")
+        return
+
+    # Creamos columnas auxiliares
+    df["longitud"] = df["entrada"].str.len()
+    df["mes"] = df["fecha"].dt.month
+    df["dia"] = df["fecha"].dt.day
+
+    fig, axes = matp.subplots(2, 2, figsize=(12,8))  # 2 filas, 2 columnas
+
+    # 1) Entradas por fecha (línea)
+    df.groupby("fecha").size().plot(ax=axes[0,0], marker="o", color="royalblue")
+    axes[0,0].set_title("Entradas por fecha")
+
+    # 2) Distribución de longitud (histograma)
+    sb.histplot(df["longitud"], bins=10, kde=True, ax=axes[0,1], color="orange")
+    axes[0,1].set_title("Distribución de longitudes")
+
+    # 3) Entradas por mes (barras)
+    df["mes"].value_counts().sort_index().plot(kind="bar", ax=axes[1,0], color="green")
+    axes[1,0].set_title("Entradas por mes")
+
+    # 4) Boxplot de longitudes
+    sb.boxplot(y=df["longitud"], ax=axes[1,1], color="red")
+    axes[1,1].set_title("Boxplot de longitudes")
+
+    matp.tight_layout()  # Ajusta para que no se superpongan
+    matp.show()
+
     
     
     
