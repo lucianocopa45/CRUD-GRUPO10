@@ -368,12 +368,12 @@ def submenu_graficos():
         match opcion:
             case '1':
                 grafico_lineas()
-            #case '2':
-                #grafico_barras()
-            #case '3':
-                #grafico_torta()
-            #case '4':
-                #grafico_histograma()
+            case '2':
+                grafico_barras()
+            case '3':
+                grafico_torta()
+            case '4':
+                grafico_histograma()
             #case '5':
                 #mostrar_todos_graficos()
             #case '6':
@@ -410,6 +410,52 @@ def grafico_lineas():
     matp.tight_layout()
     matp.show()
     
+    
+    #Funcion para generar Graficos de Barras:
+def grafico_barras():
+        df = cargar_datos_diario()
+        if df.empty:
+            print("⚠️ No hay datos para graficar")
+            return
+
+        matp.figure(figsize=(8,4))
+        sb.countplot(data=df, x="titulo", order=df["titulo"].value_counts().index)
+        matp.title("Cantidad de entradas por título")
+        matp.xticks(rotation=45)
+        matp.tight_layout()
+        matp.show()
+        
+        
+#Funcion para generar Grafico de torta:
+def grafico_torta():
+    df = cargar_datos_diario()
+    if df.empty:
+        print("⚠️ No hay datos para graficar")
+        return
+
+    conteo = df["titulo"].value_counts()
+
+    matp.figure(figsize=(6,6))
+    matp.pie(conteo, labels=conteo.index, autopct="%1.1f%%", startangle=90)
+    matp.title("Proporción de entradas por título")
+    matp.show()
+        
+#Funcion para generar Grafico Histograma:
+def grafico_histograma():
+    df = cargar_datos_diario()
+    if df.empty:
+        print("⚠️ No hay datos para graficar")
+        return
+
+    df["longitud"] = df["entrada"].str.len()
+
+    matp.figure(figsize=(8,4))
+    sb.histplot(df["longitud"], bins=10, kde=True, color="skyblue")
+    matp.title("Distribución de la longitud de las entradas")
+    matp.xlabel("Cantidad de caracteres")
+    matp.ylabel("Frecuencia")
+    matp.tight_layout()
+    matp.show()   
     
     
     

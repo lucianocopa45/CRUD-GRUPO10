@@ -1,32 +1,42 @@
 [
     {
-        "fecha": "23-05-1998",
-        "titulo": "Canciones",
-        "entrada": "Hoy escuche lindas canciones en la radio"
+        "fecha":"23-05-1998",
+        "titulo":"Canciones",
+        "entrada":"Hoy escuche lindas canciones en la radio"
     },
     {
-        "fecha": "24-11-2024",
-        "titulo": "Reflexiones",
-        "entrada": "Me senti inspirada al ver..."
+        "fecha":"24-11-2024",
+        "titulo":"Reflexiones",
+        "entrada":"Me senti inspirada al ver..."
     },
     {
-        "fecha": "03-04-2010",
-        "titulo": "Sueños",
-        "entrada": "Tuve un lindo sueño sobre..."
+        "fecha":"03-04-2010",
+        "titulo":"Sueños",
+        "entrada":"Tuve un lindo sueño sobre..."
     },
     {
-        "fecha": "12-11-2000",
-        "titulo": "Dia de la amistad",
-        "entrada": "Hoy hicimos un picnic con mis amigos"
+        "fecha":"12-11-2000",
+        "titulo":"Dia de la amistad",
+        "entrada":"Hoy hicimos un picnic con mis amigos"
     },
     {
-        "fecha": "16-09-2025",
-        "titulo": "Recuerdos",
-        "entrada": "Pase tiempo con amigos y fue genial..."
+        "fecha":"16-09-2025",
+        "titulo":"Recuerdos",
+        "entrada":"Pase tiempo con amigos y fue genial..."
     },
     {
-        "fecha": "16-10-2024",
-        "titulo": "Una aventura",
-        "entrada": "Me senti inspirada al ver..."
+        "fecha":"16-10-2024",
+        "titulo":"Una aventura",
+        "entrada":"Me senti inspirada al ver..."
+    },
+    {
+        "fecha":"02-07-2025",
+        "titulo":"Una aventura",
+        "entrada":"Hoy me encontre con una ex compañera del colegio"
+    },
+    {
+        "fecha":"07-05-2025",
+        "titulo":"Momentos felices",
+        "entrada":"Tuve un lindo sueño sobre..."
     }
 ]
