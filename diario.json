@@ -78,5 +78,25 @@
         "fecha": "03-01-2025",
         "titulo": "Una aventura",
         "entrada": "Hoy aprendi algo nuevo..."
+    },
+    {
+        "fecha": "12-12-2012",
+        "titulo": "Nueva amistad",
+        "entrada": "Hoy hice una nueva amiga"
+    },
+    {
+        "fecha": "16-05-2025",
+        "titulo": "Un dia inolvidable",
+        "entrada": "Recorde un grato momento de mi infancia..."
+    },
+    {
+        "fecha": "11-10-2024",
+        "titulo": "Lindo encuentro",
+        "entrada": "Pase tiempo con amigos y fue genial..."
+    },
+    {
+        "fecha": "05-06-2025",
+        "titulo": "Pensamientos",
+        "entrada": "Me senti inspirada al ver..."
     }
 ]

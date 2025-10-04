@@ -1,13 +1,13 @@
 # Importamos librerías necesarias
 import os      # Para limpiar la consola según el sistema operativo
 import json     # Para leer y escribir archivos json
-import time
+import time    #Para pausar la ejecucion 
 import pandas as pd #Para analizar y mostrar los datos en formato de tablas
 import random #Para seleccionar datoss aleatorios
 from datetime import datetime, timedelta #Para generar Fechas aleatorias en los ultimos 365 dias
 import matplotlib.pyplot as matp #Matplolib: crea los graficos
 import seaborn as sb #seaborn: Crea graficos estadisticos mas esteticos que Matplotlib
-import calendar
+import calendar  #Para obtener nombre y numeros de los meses del año
 
 
 
@@ -114,7 +114,7 @@ def ver_Diarios(pausar_despues=True):
             
     if not diario:
         print("\n😔 Aún no tienes Diarios en tu diario. ¡Añade una nueva! 😔")
-    else:
+    else: # Si hay entradas, se recorren y muestran con formato estético
         for i, entrada in enumerate(diario, start=1):
             print(f"\n\033[93mEntrada #{i}\033[0m")
             print(f"🗓  Fecha : \033[92m{entrada['fecha']}\033[0m")
@@ -154,7 +154,7 @@ def Seleccionar_Diario():
         pausar()
         return None
     
-#Funcion para actualizar el contenido de un Diario:
+
 # Funcion para actualizar el contenido de un Diario:
 def actualizar_Diario():
     print("\033[96m" + "═" * 45 + "\033[0m")
@@ -213,26 +213,40 @@ def salir():
 def buscar_Diario_PorTitulo():
     limpiar_consola()
     print("\033[96m" + "═" * 45 + "\033[0m")
-    print(" 🔍 \033[1mBuscar Diario por Titulo🔍\033[0m")
-    print("\033[96m" + "═" * 45 + "\033[0m")   
-    
-    if not diario:  # Si no hay Diarios, avisamos
-        print("\n😔 No hay Diarios para buscar. 😔")
+    print(" 🔍 \033[1mBuscar Diario por Título🔍\033[0m")
+    print("\033[96m" + "═" * 45 + "\033[0m")
+
+    # Si el diario está vacío, no hay nada que buscar
+    if not diario:
+        print("\n😔 No hay entradas en el diario para buscar. 😔")
         pausar()
         return
-    titulo_buscado = input("Ingrese el titulo o parte del titulo a buscar:").lower()
-    encontrados = [e for e in diario if titulo_buscado in e[1].lower()]  # Buscamos coincidencias
-    if encontrados:
-        print("\n✨ Diarios encontradas: ✨")
-        for i, Diario in enumerate(encontrados, start=1):
-            print(f"\nDiario #{i} | Fecha: {Diario[0]} | Título: {Diario[1]} | Diario: {Diario[2]}")
-    else:
-        print("\n😔 No se encontraron Diarios con ese criterio. 😔")
-    pausar()  # Pausamos para que el usuario vea los resultados
 
+    # Solicitar el texto a buscar (no sensible a mayúsculas)
+    titulo_buscado = input("Ingrese el título o parte del título a buscar: ").lower()
+
+    # Buscar coincidencias parciales en los títulos
+    encontrados = [
+        entrada for entrada in diario
+        if titulo_buscado in entrada["titulo"].lower()
+    ]
+
+    # Mostrar resultados
+    if encontrados:
+        print("\n✨ Entradas encontradas: ✨")
+        for i, entrada in enumerate(encontrados, start=1):
+            print(f"\nEntrada #{i}")
+            print(f"🗓  Fecha : {entrada['fecha']}")
+            print(f"📌 Título: {entrada['titulo']}")
+            print("📜 Texto :")
+            print(f"    {entrada['entrada']}")
+            print("\033[96m" + "-" * 45 + "\033[0m")
+    else:
+        print("\n😔 No se encontraron entradas con ese criterio. 😔")
+
+    pausar()
 def guardar_Diario():
-    
-    #Guarda la lista global 'diario' en un archivo CSV."""
+    #Guarda la lista global 'diario' en un archivo JSON.
     limpiar_consola() #Limpiamos primero la consola
     
     print("\033[96m" + "═" * 50 + "\033[0m")
@@ -240,10 +254,11 @@ def guardar_Diario():
     print("\033[96m" + "═" * 50 + "\033[0m")
 
     if not diario:
-        print("\n😔 No hay entradas para guardar. 😔")
+        print("\n😔 No hay entradas para guardar. 😔")# Verificar si hay entradas en el diario
         pausar()
         return
-
+    
+        # Guardar el diario en archivo JSON
     try:
         nombre_archivo = "diario.json"
         with open(nombre_archivo, "w", encoding="utf-8") as archivo:
@@ -252,24 +267,22 @@ def guardar_Diario():
     except Exception as e:
         print(f"❌ Error al guardar el diario: {e} ❌")
 
-    pausar()
-
-
+    pausar() # Pausar para que el usuario vea el mensaje
 
 # ──────────────────────────────────────────────
 # Función para cargar el diario desde archivo JSON
 # ──────────────────────────────────────────────
 def cargar_diario_json():
     limpiar_consola()
-    print("\033[96m" + "═" * 50 + "\033[0m")
+    print("\033[96m" + "═" * 50 + "\033[0m")# Imprime una línea decorativa de 50 caracteres en color cyan para separar visualmente el encabezado.
     print(" 📂 \033[1mCargar Diario desde archivo JSON\033[0m 📂")
     print("\033[96m" + "═" * 50 + "\033[0m")
 
     try:
-        nombre_archivo = "diario.json"
-        with open(nombre_archivo, "r", encoding="utf-8") as archivo:
+        nombre_archivo = "diario.json" # Define el nombre del archivo JSON de donde se cargarán los datos.
+        with open(nombre_archivo, "r", encoding="utf-8") as archivo:  #Abre el archivo en modo lectura ('r') con codificación UTF-8 para soportar caracteres especiales.
             datos = json.load(archivo)   # Leer JSON
-            diario.clear()
+            diario.clear()# Vacía la lista global `diario` para reemplazar su contenido con los datos cargados Y no duplicar datos..
             diario.extend(datos)
 
             if diario:
@@ -286,9 +299,9 @@ def cargar_diario_json():
     pausar()  # Pausa para que el usuario vea todo
     
     
-    #===========================================
-    #Funcion para Generar Datos aleatoriamente
-    #===========================================
+#===========================================
+#Funcion para Generar Datos aleatoriamente
+#===========================================
 
 # Lista global
 diario = []
@@ -314,21 +327,22 @@ def GenerarDatos_aleatorio():
     
     #  Cargar datos existentes del JSON, si existe
     try:
-        df_existente = pd.read_json("diario.json")
-        diario = df_existente.to_dict(orient="records")  # Convertimos a lista de diccionarios
+        df_existente = pd.read_json("diario.json") # Intenta leer el archivo 'diario.json' usando pandas y cargarlo como DataFrame.
+        diario = df_existente.to_dict(orient="records") # Convierte el DataFrame a una lista de diccionarios para manipularlo fácilmente en Python.
+
     except FileNotFoundError:
         diario = []  # Si no existe el archivo, empezamos con lista vacía
     
     try:
-        cantidad = int(input("Ingrese la cantidad de datos a generar: "))
+        cantidad = int(input("Ingrese la cantidad de datos a generar: ")) # Solicita al usuario la cantidad de entradas aleatorias que desea generar.
     except ValueError:
         print("❌ Entrada inválida. Debe ingresar un número entero.")
         return  # sale de la función si hay error
 
     # Generar datos aleatorios
-    fechas = generar_fechas_aleatorias(cantidad)
-    titulos = [random.choice(titulos_ejemplos) for _ in range(cantidad)]
-    entradas = [random.choice(entradas_ejemplos) for _ in range(cantidad)]
+    fechas = generar_fechas_aleatorias(cantidad) # Llama a la función que genera fechas aleatorias según la cantidad solicitada.
+    titulos = [random.choice(titulos_ejemplos) for _ in range(cantidad)]  #Genera una lista de títulos aleatorios seleccionados de la lista `titulos_ejemplos`.
+    entradas = [random.choice(entradas_ejemplos) for _ in range(cantidad)] # Genera una lista de textos de entrada aleatorios seleccionados de `entradas_ejemplos`.
 
     # Crear lista de diccionarios
     nuevas_entradas = [{"fecha": fechas[i], "titulo": titulos[i], "entrada": entradas[i]} for i in range(cantidad)]
@@ -346,6 +360,15 @@ def GenerarDatos_aleatorio():
 #=====================================
 # Funcion Generar Graficos y reportes
 #=====================================
+"""PROMPT CHATGTP:
+Necesito crear 4 graficos y mostrarlos en un 5to grafico todos juntos.Para la generacion de cada tipo de grafico, hacer una funcion. Puede ser de linea, de barras, histograma y de torta.
+Para una mayor visualizacion y analisis de los mismos, necesito que se muestre, titulo general, etiquetas de los ejes X e Y, las barras
+y cada columna del histograma mostrar su valor encima, que tenga mejoras en bordes y textos,ajustar tamaños si es necesario.
+Usar colores suaves. Realiza otras mejoras si es necesario.
+Recordar que estamos trabajando con pandas,Seaborn y Matplotlib  
+
+"""
+
 
 # SUBMENÚ - GENERAR GRÁFICOS Y REPORTES
 
@@ -355,7 +378,6 @@ def submenu_graficos():
         print("\033[96m" + "═" * 50 + "\033[0m")
         print(" 📊 \033[1mSubmenú - Generar Gráficos\033[0m")
         print("\033[96m" + "═" * 50 + "\033[0m")
-
         print("1. 📈 Gráfico de líneas (entradas por fecha)")
         print("2. 📊 Gráfico de barras (entradas por título)")
         print("3. 🥧 Gráfico circular (proporción de entradas)")
@@ -383,33 +405,39 @@ def submenu_graficos():
                 pausar()
                 
 #Funcion para cargar datos para generar los graficos:
+"""
+    Carga los datos del diario desde un archivo JSON y prepara las fechas para análisis y gráficos.
+    """
 def cargar_datos_diario(nombre_archivo="diario.json"):
     try:
-        df = pd.read_json(nombre_archivo, encoding="utf-8")
-        df["fecha"] = pd.to_datetime(df["fecha"], format="%d-%m-%Y", errors="coerce")
-        return df
+        df = pd.read_json(nombre_archivo, encoding="utf-8") # Lee el archivo JSON usando pandas y lo carga en un DataFrame.
+        df["fecha"] = pd.to_datetime(df["fecha"], format="%d-%m-%Y", errors="coerce") # Convierte la columna 'fecha' a objetos datetime para poder trabajar con fechas.`errors="coerce"` convierte valores inválidos a NaT (not a time) en caso de error.
+        return df # Devuelve el DataFrame listo para análisis o gráficos.
     except Exception as e:
         print(f"❌ Error al cargar el archivo: {e}")
-        return pd.DataFrame()              
+        return pd.DataFrame() #Devuelve un DataFrame vacío para que el programa pueda continuar sin romperse        
 
 #Funcion para generar Graficos de lineas:
 def grafico_lineas():
-    df = cargar_datos_diario()
+    df = cargar_datos_diario() # Carga los datos del diario usando la función anterior
     if df.empty:
         print("⚠️ No hay datos para graficar")
-        return
+        return   # Si el DataFrame está vacío, se avisa al usuario y se sale de la función.
 
-    conteo = df.groupby("fecha").size().reset_index(name="cantidad")
+    conteo = df.groupby("fecha").size().reset_index(name="cantidad") 
+    # Agrupa los datos por fecha y cuenta cuántas entradas hay por cada fecha.
+    # `reset_index(name="cantidad")` convierte el resultado en un DataFrame con columnas 'fecha' y 'cantidad'.
 
-    matp.figure(figsize=(8,4))
-    sb.lineplot(data=conteo, x="fecha", y="cantidad", marker="o")
-    matp.title("Entradas por fecha")
-    matp.xticks(rotation=45)
-    matp.tight_layout()
+    matp.figure(figsize=(8,4)) # Crea una nueva figura para el gráfico con tamaño 8x4 pulgadas
+    sb.lineplot(data=conteo, x="fecha", y="cantidad", marker="o") # Genera un gráfico de líneas con seaborn usando 'fecha' en el eje X y 'cantidad' en el eje Y.
+    # `marker="o"` coloca un círculo en cada punto de datos.
+    matp.title("Entradas por fecha") # Establece el título del gráfico.
+    matp.xticks(rotation=45) # Rota las etiquetas del eje X 45 grados para que se vean mejor.
+    matp.tight_layout() # Ajusta automáticamente los márgenes para que nada se superponga
     matp.show()
     
     
-    #Funcion para generar Graficos de Barras:
+#Funcion para generar Graficos de Barras:
 def grafico_barras():
 # Cargar los datos desde el JSON
     df = cargar_datos_diario()
@@ -422,27 +450,28 @@ def grafico_barras():
 
     # Gráfico de barras ordenado por cantidad de apariciones del título
     ax = sb.countplot(
-    data=df,
+    data=df,  # Se especifica el DataFrame que contiene los datos
     x="titulo",
-    order=df["titulo"].value_counts().index,
+    order=df["titulo"].value_counts().index, #Ordena las barras según la cantidad de entradas por título (de mayor a menor)
     color=sb.color_palette("viridis")[0]  # Un solo color de la paleta
 )
 
     # Personalización
-    matp.title("Cantidad de entradas por título", fontsize=14)
-    matp.xlabel("Título del diario", fontsize=12)
-    matp.ylabel("Cantidad de entradas", fontsize=12)
-    matp.xticks(rotation=45, ha='right')
+    matp.title("Cantidad de entradas por título", fontsize=14) # Establece el título del gráfico con tamaño de fuente 14
+    matp.xlabel("Título del diario", fontsize=12) # Etiqueta el eje X con el nombre "Título del diario" y tamaño de fuente 12
+    matp.ylabel("Cantidad de entradas", fontsize=12) # Etiqueta el eje Y con el nombre "Cantidad de entradas" y tamaño de fuente 12
+    matp.xticks(rotation=45, ha='right') # Rota las etiquetas del eje X 45 grados para que se lean mejor
+        # 'ha="right"' alinea las etiquetas hacia la derecha para evitar superposición
 
     # Agregar los valores arriba de cada barra
-    for p in ax.patches:
-        height = p.get_height()
+    for p in ax.patches: # Recorre cada barra (patch) del gráfico
+        height = p.get_height() # Obtiene la altura de la barra, que representa la cantidad de entradas
         ax.text(
-            p.get_x() + p.get_width() / 2,
-            height + 0.1,
-            f"{int(height)}",
-            ha='center',
-            va='bottom',
+            p.get_x() + p.get_width() / 2, # Posición horizontal: centro de la barra
+            height + 0.1, # Posición vertical: un poco por encima de la barra
+            f"{int(height)}", # Texto a mostrar: la cantidad convertida a entero
+            ha='center',  #Centra el texto horizontalmente
+            va='bottom',  # Coloca el texto justo arriba de la barra
             fontsize=10,
             color='black'
         )
@@ -462,10 +491,11 @@ def grafico_torta():
         print("⚠️ No hay datos para graficar")
         return
 
-    conteo = df["titulo"].value_counts()
+    conteo = df["titulo"].value_counts() # Cuenta cuántas veces aparece cada título en el diario
+    # Devuelve un objeto Series con títulos como índice y cantidad como valores
 
-    matp.figure(figsize=(6,6))
-    matp.pie(conteo, labels=conteo.index, autopct="%1.1f%%", startangle=90)
+    matp.figure(figsize=(7,7)) # Crea una figura cuadrada de 7*7 pulgadas para el gráfico de torta
+    matp.pie(conteo, labels=conteo.index, autopct="%1.1f%%", startangle=90)  # Muestra porcentaje con 1 decimal en cada porción Rotación inicial del gráfico en grados
     matp.title("Proporción de entradas por título")
     matp.show()
         
@@ -476,24 +506,18 @@ def grafico_histograma():
         print("⚠️ No hay datos para graficar")
         return
 
-    df["longitud"] = df["entrada"].str.len()
+    df["longitud"] = df["entrada"].str.len() #Crea una nueva columna 'longitud' que contiene la cantidad de caracteres de cada entrada
 
-    matp.figure(figsize=(8,4))
-    sb.histplot(df["longitud"], bins=10, kde=True, color="skyblue")
+    matp.figure(figsize=(8,4)) #Crea una nueva figura de 8*4
+    sb.histplot(df["longitud"], bins=10, kde=True, color="skyblue") #bins=10, Número de intervalos (barras) en el histograma, kde=True Añade una curva de densidad estimada sobre el histograma
     matp.title("Distribución de la longitud de las entradas")
     matp.xlabel("Cantidad de caracteres")
     matp.ylabel("Frecuencia")
-    matp.tight_layout()
-    matp.show()   
+    matp.tight_layout() # Ajusta automáticamente los márgenes para que no se superpongan elementos
+    matp.show() #Muestra el grafico  
     
     
 #Funcion que muestra todos los graficos como un grid de 2x2
-def mostrar_todos_graficos():
-    import calendar
-import pandas as pd
-import matplotlib.pyplot as matp
-import seaborn as sb
-
 def mostrar_todos_graficos():
     df = cargar_datos_diario()
     if df.empty:
@@ -501,31 +525,34 @@ def mostrar_todos_graficos():
         return
 
     # Aseguramos que 'fecha' sea datetime
-    df["fecha"] = pd.to_datetime(df["fecha"], format="%d-%m-%Y", errors="coerce")
-    df = df.dropna(subset=["fecha"]).copy()
+    df["fecha"] = pd.to_datetime(df["fecha"], format="%d-%m-%Y", errors="coerce") # Convierte la columna 'fecha' del DataFrame a tipo datetime usando el formato DD-MM-AAAA
+# Si algún valor no se puede convertir, se establece como NaT (not a time)
+    df = df.dropna(subset=["fecha"]).copy()# Elimina filas donde la columna 'fecha' es NaT
+# Se usa copy() para evitar advertencias de pandas sobre modificaciones en vistas
     if df.empty:
         print("⚠️ No hay entradas con fecha válida para graficar.")
         return
 
     # Columnas auxiliares
-    df["longitud"] = df["entrada"].str.len()
-    df["mes"] = df["fecha"].dt.month
-    df["dia"] = df["fecha"].dt.day
+    df["longitud"] = df["entrada"].str.len() # Calcula la longitud de cada entrada (cantidad de caracteres) y la guarda en una nueva columna
+    df["mes"] = df["fecha"].dt.month # Extrae el mes de la fecha y lo almacena en una nueva columna
+    df["dia"] = df["fecha"].dt.day  # Extrae el día de la fecha y lo almacena en otra columna
 
-    fig, axes = matp.subplots(2, 2, figsize=(14, 10))
-    fig.suptitle("📊 Resumen general del Diario", fontsize=16, fontweight="bold")
+    fig, axes = matp.subplots(2, 2, figsize=(14, 10)) # Crea una figura con 2 filas y 2 columnas de subgráficos
+    fig.suptitle(" Resumen general del Diario", fontsize=16, fontweight="bold")  #Coloca un título general para toda la figura
 
     # -- 1 Entradas por fecha (línea)
-    conteo_fecha = df.groupby("fecha").size().sort_index()
+    conteo_fecha = df.groupby("fecha").size().sort_index() # Agrupa los datos por fecha y cuenta cuántas entradas hay por fecha y las ordena.
     axes[0, 0].plot(conteo_fecha.index, conteo_fecha.values, marker="o", color="royalblue")
     axes[0, 0].set_title("Evolución de entradas por fecha")
     axes[0, 0].set_xlabel("Fecha")
     axes[0, 0].set_ylabel("Cantidad de entradas")
-    axes[0, 0].tick_params(axis='x', rotation=45)
-    axes[0, 0].grid(True, linestyle="--", alpha=0.5)
+    axes[0, 0].tick_params(axis='x', rotation=45) # Rota las etiquetas del eje X 45 grados para mejor legibilidad
+    axes[0, 0].grid(True, linestyle="--", alpha=0.5) # Añade una cuadrícula con líneas punteadas y transparencia media
 
     # ---  Distribución de longitudes (histograma)
-    n, bins, patches = axes[0, 1].hist(df["longitud"], bins=10, color="orange", edgecolor="black")
+    n, bins, patches = axes[0, 1].hist(df["longitud"], bins=10, color="orange", edgecolor="black")# Crea un histograma de las longitudes de las entradas
+# n = frecuencia, bins = límites de los intervalos, patches = objetos de las barras
     axes[0, 1].set_title("Distribución de longitudes de las entradas")
     axes[0, 1].set_xlabel("Longitud del texto (caracteres)")
     axes[0, 1].set_ylabel("Frecuencia")
@@ -539,18 +566,18 @@ def mostrar_todos_graficos():
             ha='center', va='bottom', fontsize=9
         )
 
-    axes[0, 1].grid(True, linestyle="--", alpha=0.5)
+    axes[0, 1].grid(True, linestyle="--", alpha=0.5) # Añade cuadrícula al histograma
 
     # ---  Entradas por mes (barras)
-    meses_counts = df["mes"].value_counts().sort_index()
+    meses_counts = df["mes"].value_counts().sort_index()  #Cuenta cuántas entradas hay por mes y ordena por mes
     if not meses_counts.empty:
         meses_idx = meses_counts.index.tolist()
-        meses_labels = [calendar.month_abbr[m] for m in meses_idx]
-        bars = axes[1, 0].bar(meses_labels, meses_counts.values, color="seagreen", edgecolor="black")
+        meses_labels = [calendar.month_abbr[m] for m in meses_idx]  # Convierte los números de mes a nombres abreviados (Ene, Feb, etc.)
+        bars = axes[1, 0].bar(meses_labels, meses_counts.values, color="seagreen", edgecolor="black")  #Crea un gráfico de barras de entradas por mes
         axes[1, 0].set_title("Entradas por mes")
         axes[1, 0].set_xlabel("Mes")
         axes[1, 0].set_ylabel("Cantidad de entradas")
-        axes[1, 0].grid(axis="y", linestyle="--", alpha=0.5)
+        axes[1, 0].grid(axis="y", linestyle="--", alpha=0.5) # Configura títulos, etiquetas y cuadrícula del gráfico de barras
 
         #  Mostrar número encima de cada barra
         for bar in bars:
@@ -565,29 +592,30 @@ def mostrar_todos_graficos():
         axes[1, 0].text(0.5, 0.5, "No hay datos por mes", ha="center")
 
     # ---  Gráfico de torta de entradas por título
-    titulo_counts = df["titulo"].value_counts()
+    titulo_counts = df["titulo"].value_counts() # Cuenta cuántas veces aparece cada título
     if not titulo_counts.empty:
-        if len(titulo_counts) > 8:
+        if len(titulo_counts) > 8:  # Si hay más de 8 títulos, agrupa los restantes en "Otros"
             top = titulo_counts.head(8)
             others = titulo_counts.iloc[8:].sum()
             top["Otros"] = others
             pie_counts = top
         else:
-            pie_counts = titulo_counts
+            pie_counts = titulo_counts # Si hay 8 o menos títulos, se usan todos
 
         axes[1, 1].pie(
-            pie_counts.values,
-            labels=pie_counts.index,
-            autopct="%1.1f%%",
-            startangle=140,
-            colors=sb.color_palette("pastel")
+            pie_counts.values,  # Valores de cada porción
+            labels=pie_counts.index,   # Etiquetas de cada porción
+            autopct="%1.1f%%", # Porcentaje mostrado en cada porción
+            startangle=140, # Rotación inicial del gráfico
+            colors=sb.color_palette("pastel") #colores de cada porcion
         )
-        axes[1, 1].set_title("Proporción de entradas por título")
+        axes[1, 1].set_title("Proporción de entradas por título") # Título y ajuste para que la torta sea circular
         axes[1, 1].axis("equal")
     else:
-        axes[1, 1].text(0.5, 0.5, "No hay títulos para mostrar", ha="center")
+        axes[1, 1].text(0.5, 0.5, "No hay títulos para mostrar", ha="center") # Mensaje si no hay títulos para mostrar en el gráfico de torta
 
-    matp.tight_layout(rect=[0, 0, 1, 0.96])
+    matp.tight_layout(rect=[0, 0, 1, 0.96]) # Ajusta los márgenes y espacio entre subgráficos, dejando espacio arriba para el título general
+
     matp.show()
 
 
