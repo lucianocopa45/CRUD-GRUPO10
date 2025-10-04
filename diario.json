@@ -1,42 +1,82 @@
 [
     {
-        "fecha":"23-05-1998",
-        "titulo":"Canciones",
-        "entrada":"Hoy escuche lindas canciones en la radio"
+        "fecha": "11-11-1999",
+        "titulo": "Chocolates",
+        "entrada": "Me encantan los chocolates"
     },
     {
-        "fecha":"24-11-2024",
-        "titulo":"Reflexiones",
-        "entrada":"Me senti inspirada al ver..."
+        "fecha": "29-05-2025",
+        "titulo": "Reflexiones",
+        "entrada": "Hoy me encontre con una ex compañera del colegio"
     },
     {
-        "fecha":"03-04-2010",
-        "titulo":"Sueños",
-        "entrada":"Tuve un lindo sueño sobre..."
+        "fecha": "23-12-2024",
+        "titulo": "Momentos felices",
+        "entrada": "Me senti inspirada al ver..."
     },
     {
-        "fecha":"12-11-2000",
-        "titulo":"Dia de la amistad",
-        "entrada":"Hoy hicimos un picnic con mis amigos"
+        "fecha": "17-06-2025",
+        "titulo": "Pensamientos",
+        "entrada": "Hoy aprendi algo nuevo..."
     },
     {
-        "fecha":"16-09-2025",
-        "titulo":"Recuerdos",
-        "entrada":"Pase tiempo con amigos y fue genial..."
+        "fecha": "04-10-2024",
+        "titulo": "Una aventura",
+        "entrada": "Hoy me encontre con una ex compañera del colegio"
     },
     {
-        "fecha":"16-10-2024",
-        "titulo":"Una aventura",
-        "entrada":"Me senti inspirada al ver..."
+        "fecha": "14-08-2025",
+        "titulo": "Momentos felices",
+        "entrada": "Hoy aprendi algo nuevo..."
     },
     {
-        "fecha":"02-07-2025",
-        "titulo":"Una aventura",
-        "entrada":"Hoy me encontre con una ex compañera del colegio"
+        "fecha": "19-10-2024",
+        "titulo": "Una aventura",
+        "entrada": "Me senti inspirada al ver..."
     },
     {
-        "fecha":"07-05-2025",
-        "titulo":"Momentos felices",
-        "entrada":"Tuve un lindo sueño sobre..."
+        "fecha": "28-01-2025",
+        "titulo": "Momentos felices",
+        "entrada": "Hoy fue un dia inolvidable porque..."
+    },
+    {
+        "fecha": "27-05-2025",
+        "titulo": "Recuerdos",
+        "entrada": "Me senti agradecida porque..."
+    },
+    {
+        "fecha": "17-09-2025",
+        "titulo": "Lindo encuentro",
+        "entrada": "Hoy fue un dia inolvidable porque..."
+    },
+    {
+        "fecha": "23-06-2025",
+        "titulo": "Lindo encuentro",
+        "entrada": "Me senti agradecida porque..."
+    },
+    {
+        "fecha": "04-03-2025",
+        "titulo": "Una aventura",
+        "entrada": "Me senti inspirada al ver..."
+    },
+    {
+        "fecha": "26-11-2024",
+        "titulo": "Sueños",
+        "entrada": "Pase tiempo con amigos y fue genial..."
+    },
+    {
+        "fecha": "27-10-2024",
+        "titulo": "Recuerdos",
+        "entrada": "Me senti agradecida porque..."
+    },
+    {
+        "fecha": "13-03-2025",
+        "titulo": "Recuerdos",
+        "entrada": "Hoy aprendi algo nuevo..."
+    },
+    {
+        "fecha": "03-01-2025",
+        "titulo": "Una aventura",
+        "entrada": "Hoy aprendi algo nuevo..."
     }
 ]

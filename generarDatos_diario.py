@@ -7,6 +7,7 @@ import random #Para seleccionar datoss aleatorios
 from datetime import datetime, timedelta #Para generar Fechas aleatorias en los ultimos 365 dias
 import matplotlib.pyplot as matp #Matplolib: crea los graficos
 import seaborn as sb #seaborn: Crea graficos estadisticos mas esteticos que Matplotlib
+import calendar
 
 
 
@@ -360,8 +361,7 @@ def submenu_graficos():
         print("3. 🥧 Gráfico circular (proporción de entradas)")
         print("4. 📉 Histograma (longitud de entradas)")
         print("5. 📋 Mostrar todos los gráficos")
-        print("6. 📝 Generar reporte")
-        print("7. ↩️ Volver al menú principal")
+        print("6. ↩️ Volver al menú principal")
 
         opcion = input("\n👉 Elige una opción: ")
 
@@ -411,17 +411,48 @@ def grafico_lineas():
     
     #Funcion para generar Graficos de Barras:
 def grafico_barras():
-        df = cargar_datos_diario()
-        if df.empty:
-            print("⚠️ No hay datos para graficar")
-            return
+# Cargar los datos desde el JSON
+    df = cargar_datos_diario()
+    if df.empty:
+        print("⚠️ No hay datos para graficar")
+        return
 
-        matp.figure(figsize=(8,4))
-        sb.countplot(data=df, x="titulo", order=df["titulo"].value_counts().index)
-        matp.title("Cantidad de entradas por título")
-        matp.xticks(rotation=45)
-        matp.tight_layout()
-        matp.show()
+    # Crear la figura
+    matp.figure(figsize=(10, 5))
+
+    # Gráfico de barras ordenado por cantidad de apariciones del título
+    ax = sb.countplot(
+    data=df,
+    x="titulo",
+    order=df["titulo"].value_counts().index,
+    color=sb.color_palette("viridis")[0]  # Un solo color de la paleta
+)
+
+    # Personalización
+    matp.title("Cantidad de entradas por título", fontsize=14)
+    matp.xlabel("Título del diario", fontsize=12)
+    matp.ylabel("Cantidad de entradas", fontsize=12)
+    matp.xticks(rotation=45, ha='right')
+
+    # Agregar los valores arriba de cada barra
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(
+            p.get_x() + p.get_width() / 2,
+            height + 0.1,
+            f"{int(height)}",
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            color='black'
+        )
+
+    # Ajustar espaciado
+    matp.tight_layout()
+
+    # Mostrar el gráfico
+    matp.show()
+
         
         
 #Funcion para generar Grafico de torta:
@@ -458,41 +489,107 @@ def grafico_histograma():
     
 #Funcion que muestra todos los graficos como un grid de 2x2
 def mostrar_todos_graficos():
+    import calendar
+import pandas as pd
+import matplotlib.pyplot as matp
+import seaborn as sb
+
+def mostrar_todos_graficos():
     df = cargar_datos_diario()
     if df.empty:
         print("⚠️ No hay datos para graficar")
         return
 
-    # Creamos columnas auxiliares
+    # Aseguramos que 'fecha' sea datetime
+    df["fecha"] = pd.to_datetime(df["fecha"], format="%d-%m-%Y", errors="coerce")
+    df = df.dropna(subset=["fecha"]).copy()
+    if df.empty:
+        print("⚠️ No hay entradas con fecha válida para graficar.")
+        return
+
+    # Columnas auxiliares
     df["longitud"] = df["entrada"].str.len()
     df["mes"] = df["fecha"].dt.month
     df["dia"] = df["fecha"].dt.day
 
-    fig, axes = matp.subplots(2, 2, figsize=(12,8))  # 2 filas, 2 columnas
+    fig, axes = matp.subplots(2, 2, figsize=(14, 10))
+    fig.suptitle("📊 Resumen general del Diario", fontsize=16, fontweight="bold")
 
-    # 1) Entradas por fecha (línea)
-    df.groupby("fecha").size().plot(ax=axes[0,0], marker="o", color="royalblue")
-    axes[0,0].set_title("Entradas por fecha")
+    # -- 1 Entradas por fecha (línea)
+    conteo_fecha = df.groupby("fecha").size().sort_index()
+    axes[0, 0].plot(conteo_fecha.index, conteo_fecha.values, marker="o", color="royalblue")
+    axes[0, 0].set_title("Evolución de entradas por fecha")
+    axes[0, 0].set_xlabel("Fecha")
+    axes[0, 0].set_ylabel("Cantidad de entradas")
+    axes[0, 0].tick_params(axis='x', rotation=45)
+    axes[0, 0].grid(True, linestyle="--", alpha=0.5)
 
-    # 2) Distribución de longitud (histograma)
-    sb.histplot(df["longitud"], bins=10, kde=True, ax=axes[0,1], color="orange")
-    axes[0,1].set_title("Distribución de longitudes")
+    # ---  Distribución de longitudes (histograma)
+    n, bins, patches = axes[0, 1].hist(df["longitud"], bins=10, color="orange", edgecolor="black")
+    axes[0, 1].set_title("Distribución de longitudes de las entradas")
+    axes[0, 1].set_xlabel("Longitud del texto (caracteres)")
+    axes[0, 1].set_ylabel("Frecuencia")
 
-    # 3) Entradas por mes (barras)
-    df["mes"].value_counts().sort_index().plot(kind="bar", ax=axes[1,0], color="green")
-    axes[1,0].set_title("Entradas por mes")
+    #  Mostrar números encima de cada barra del histograma
+    for i in range(len(n)):
+        axes[0, 1].text(
+            (bins[i] + bins[i+1]) / 2,  # posición X centrada
+            n[i] + 0.2,                 # posición Y un poco arriba
+            int(n[i]),                  # el número
+            ha='center', va='bottom', fontsize=9
+        )
 
-    # 4) Boxplot de longitudes
-    sb.boxplot(y=df["longitud"], ax=axes[1,1], color="red")
-    axes[1,1].set_title("Boxplot de longitudes")
+    axes[0, 1].grid(True, linestyle="--", alpha=0.5)
 
-    matp.tight_layout()  # Ajusta para que no se superpongan
+    # ---  Entradas por mes (barras)
+    meses_counts = df["mes"].value_counts().sort_index()
+    if not meses_counts.empty:
+        meses_idx = meses_counts.index.tolist()
+        meses_labels = [calendar.month_abbr[m] for m in meses_idx]
+        bars = axes[1, 0].bar(meses_labels, meses_counts.values, color="seagreen", edgecolor="black")
+        axes[1, 0].set_title("Entradas por mes")
+        axes[1, 0].set_xlabel("Mes")
+        axes[1, 0].set_ylabel("Cantidad de entradas")
+        axes[1, 0].grid(axis="y", linestyle="--", alpha=0.5)
+
+        #  Mostrar número encima de cada barra
+        for bar in bars:
+            height = bar.get_height()
+            axes[1, 0].text(
+                bar.get_x() + bar.get_width()/2,
+                height + 0.1,
+                f"{int(height)}",
+                ha='center', va='bottom', fontsize=9
+            )
+    else:
+        axes[1, 0].text(0.5, 0.5, "No hay datos por mes", ha="center")
+
+    # ---  Gráfico de torta de entradas por título
+    titulo_counts = df["titulo"].value_counts()
+    if not titulo_counts.empty:
+        if len(titulo_counts) > 8:
+            top = titulo_counts.head(8)
+            others = titulo_counts.iloc[8:].sum()
+            top["Otros"] = others
+            pie_counts = top
+        else:
+            pie_counts = titulo_counts
+
+        axes[1, 1].pie(
+            pie_counts.values,
+            labels=pie_counts.index,
+            autopct="%1.1f%%",
+            startangle=140,
+            colors=sb.color_palette("pastel")
+        )
+        axes[1, 1].set_title("Proporción de entradas por título")
+        axes[1, 1].axis("equal")
+    else:
+        axes[1, 1].text(0.5, 0.5, "No hay títulos para mostrar", ha="center")
+
+    matp.tight_layout(rect=[0, 0, 1, 0.96])
     matp.show()
 
-    
-    
-    
-    
 
 # =====================================
 # Función principal que controla el flujo del programa
