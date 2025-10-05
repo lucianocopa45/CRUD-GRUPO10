@@ -314,6 +314,91 @@ while True:
             input("\nPresiona ENTER para continuar...")
             
         case "8":
+            entradaDatos = int(input("Ingrese la cantidad de datos que desea generar: "))
+            
+            nombreProyecto = [
+            "Sistema de Gestión Escolar", "Plataforma de E-commerce", "App de Reservas Médicas",
+            "Gestión de Recursos Humanos", "Control de Inventarios", "Plataforma de Streaming",
+            "Sistema de Facturación", "App de Delivery", "Gestión de Proyectos", "CRM Empresarial",
+            "Portal de Noticias", "Sistema de Bibliotecas", "App de Transporte Urbano",
+            "Red Social Estudiantil", "Sistema de Turnos Online", "Plataforma de Cursos",
+            "Control de Producción", "Gestión de Eventos", "App de Finanzas Personales",
+            "Sistema de Seguridad", "Plataforma de Viajes", "App de Fitness", "Control de Calidad",
+            "Sistema de Hospitales", "Gestión de Almacenes", "App de Compras Locales",
+            "Plataforma de Reclutamiento", "Sistema de Reservas Hoteleras", "App de Música",
+            "Control de Obras", "Gestión Contable", "Plataforma de Seguros",
+            "Sistema de Ventas Minoristas", "App de Transporte Escolar", "Gestión de Clientes",
+            "Plataforma de Aprendizaje", "Sistema de Parking", "App de Turismo",
+            "Gestión Documental", "Sistema de Soporte Técnico", "App de Bienestar",
+            "Plataforma de Donaciones", "Sistema de Votación Online", "App de Mascotas",
+            "Gestión de Clínicas", "Sistema de Logística", "App de Idiomas",
+            "Control de Stock", "Plataforma de Crowdfunding", "Sistema de Reservas Deportivas",
+            "App de Noticias Locales", "Plataforma de Inversiones", "Gestión de Transporte",
+            "Sistema de Energía Renovable", "App de Recetas", "Gestión de Hoteles",
+            "Plataforma de Podcasts", "Sistema de Bibliotecas Digitales", "App de Agricultura",
+            "Gestión de Seguros", "Sistema de Compras Públicas", "App de Fotografía",
+            "Plataforma de Voluntariado", "Sistema de Puertos", "App de Salud Mental",
+            "Gestión de Escuelas", "Plataforma de Streaming Educativo", "App de Viajes Compartidos",
+            "Sistema de Bomberos", "Gestión de Restaurantes", "App de Juegos Educativos",
+            "Plataforma de Conferencias", "Sistema de Seguridad Ciudadana", "App de Reciclaje",
+            "Gestión de Clubes Deportivos", "Plataforma de Educación Financiera", "App de Transporte Interurbano",
+            "Sistema de Bibliotecas Escolares", "Gestión de Universidades", "App de Citas Médicas",
+            "Plataforma de Cursos Online", "Sistema de Transporte Marítimo", "App de Deportes",
+            "Gestión de Bares", "Plataforma de Streaming Musical", "App de Educación Infantil",
+            "Sistema de Aeropuertos", "Gestión de Obras Públicas", "App de Idiomas Infantiles",
+            "Plataforma de Networking", "Sistema de Call Center", "App de Radio Online",
+            "Gestión de Bancos", "Plataforma de Telemedicina", "App de Reservas Gastronómicas",
+            "Sistema de Transporte Aéreo", "Gestión de Hospitales", "App de Podcasts",
+            "Plataforma de Crowdsourcing", "Sistema de Archivos Digitales", "App de Bibliotecas Virtuales"
+            ]
+            
+            nombreResponsable = [
+            "Luciano García", "Martina Fernández", "Juan Pérez", "Sofía Rodríguez", "Diego López",
+            "Camila Martínez", "Matías Gómez", "Valentina Díaz", "Julián Torres", "Carolina Romero",
+            "Agustín Sosa", "Florencia Álvarez", "Nicolás Ruiz", "Paula Ramírez", "Sebastián Molina",
+            "Mariana Castillo", "Gabriel Ortiz", "Laura Silva", "Federico Acosta", "Andrea Medina",
+            "Luciano Fernández", "Martina García", "Juan Ramírez", "Sofía López", "Diego Pérez",
+            "Camila Torres", "Matías Romero", "Valentina Díaz", "Julián Ortiz", "Carolina Martínez",
+            "Agustín Ruiz", "Florencia Sosa", "Nicolás Molina", "Paula García", "Sebastián Fernández",
+            "Mariana Ramírez", "Gabriel López", "Laura Pérez", "Federico Romero", "Andrea Torres",
+            "Luciano Díaz", "Martina Álvarez", "Juan Castillo", "Sofía Silva", "Diego Ortiz",
+            "Camila Medina", "Matías Acosta", "Valentina García", "Julián Fernández", "Carolina Ruiz",
+            "Agustín Ramírez", "Florencia López", "Nicolás Pérez", "Paula Romero", "Sebastián Torres",
+            "Mariana Díaz", "Gabriel Molina", "Laura Sosa", "Federico Álvarez", "Andrea Castillo",
+            "Luciano Silva", "Martina Ortiz", "Juan Medina", "Sofía Acosta", "Diego García",
+            "Camila Fernández", "Matías Ramírez", "Valentina López", "Julián Pérez", "Carolina Romero",
+            "Agustín Torres", "Florencia Díaz", "Nicolás Molina", "Paula Álvarez", "Sebastián Castillo",
+            "Mariana Silva", "Gabriel Ortiz", "Laura Medina", "Federico Acosta", "Andrea García",
+            "Luciano Fernández", "Martina López", "Juan Pérez", "Sofía Romero", "Diego Torres",
+            "Camila Díaz", "Matías Molina", "Valentina Ramírez", "Julián García", "Carolina Fernández",
+            "Agustín Ortiz", "Florencia Silva", "Nicolás Medina", "Paula Acosta", "Sebastián Romero",
+            "Mariana López", "Gabriel Torres", "Laura Castillo", "Federico Pérez", "Andrea Molina"
+            ]
+                        
+            for _ in range(entradaDatos):
+                
+                estadoAleatorio = random.randint(1,3)
+                estadoAleatorio = estados_validos[estadoAleatorio]
+                
+                datos.append({
+                "nombreProyecto": random.choice(nombreProyecto),
+                "nombreResponsable": random.choice(nombreResponsable),
+                "estado": estadoAleatorio,
+                "avance": random.randint(1,100)
+            })
+                
+            print(f"La cantidad de {entradaDatos} datos aleatorios generados correctamente")
+            
+            for item in datos:
+                print(item)
+                
+            input("\nPresiona ENTER para continuar...")                
+            
+            df = pd.DataFrame(datos)
+            
+            df.to_json(f"datos_random.json", orient="records", indent=4)
+
+        case "10":
             # --- SALIR DEL PROGRAMA ---
             print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
             salir = input("Escriba [s] para salir o [n] para volver al menú: ").strip().lower()
