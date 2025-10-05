@@ -1,16 +1,22 @@
 # Importamos librerías necesarias
 import os   # Para interactuar con el sistema operativo (ej: limpiar la consola)
 import json # Para guardar y recuperar la agenda de proyectos en formato JSON
+import random
+import pandas as pd
 
 # Lista principal que almacena todos los proyectos
 # Cada proyecto es una lista con 4 elementos: [nombreProyecto, nombreResponsable, estado, avance]
 proyectos = []
 
+datos = []
+
+entradaDatos = 0
+
 # Variable para confirmar salida del programa
 salir = ''
 
 # Diccionario para mapear números a estados del proyecto
-estados_validos = {"1": "Pendiente", "2": "En progreso", "3": "Finalizado"}
+estados_validos = {1: "Pendiente", 2: "En progreso", 3: "Finalizado"}
 
 # Bucle principal del programa: se ejecuta hasta que el usuario decida salir
 while True:
@@ -25,7 +31,6 @@ while True:
     print("5.- Buscar proyecto")
     print("6.- Guardar agenda en JSON")
     print("7.- Recuperar agenda desde JSON")
-    print("8.- Salir")
     
     # Pedimos al usuario que elija una opción
     opcion = input("\nElegir una opcion: ").strip()
@@ -51,10 +56,10 @@ while True:
                 continue
             
             # Solicitar estado mediante número (1-3)
-            estado = input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip()
+            estado = int(input("\nTipo de estado: \n1.-Pendiente \n2.-En progreso \n3.-Finalizado \nIngrese el estado: ").strip())
             
             # Validar estado ingresado
-            if estado not in ["1", "2", "3"]:
+            if estado not in [1, 2, 3]:
                 print("Estado inválido")
                 input("\nPresiona ENTER para continuar...")
                 continue
@@ -72,22 +77,72 @@ while True:
             proyectos.append([nombreProyecto, nombreResponsable, estado, int(avance)])
             
             input("\nPresiona ENTER para continuar...")
-        
+
         case "2":
             # --- LEER PROYECTOS ---
             print("Usted seleccionó la opción: ", opcion)
             
-            if len(proyectos) == 0:
+            if len(proyectos) == 0 and len(datos) == 0:
                 print("No hay proyectos registrados")
             else:
-                # Recorremos la lista de proyectos y mostramos cada uno
-                for i, proj in enumerate(proyectos, start=1):
-                    nombreProyecto, nombreResponsable, estado, avance = proj
-                    # Creamos una barra de progreso visual de 10 bloques
-                    barra = "█" * (avance // 10) + "-" * (10 - avance // 10)
-                    # Mostramos toda la información
-                    print(f"{i} .- Nombre: {nombreProyecto} - Responsable: {nombreResponsable} - Estado: {estado} - Avance: [{barra}] {avance}%")
+            # Recorremos la lista de proyectos y mostramos cada uno
+                print()            
+                print("---------------------------------------Lista de proyectos--------------------------")
+                print()
+                print("{:<30} {:<25} {:<15} {:<15}".format("Proyecto", "Responsable", "Estado", "Avance"))
+                print("-" * 90)
+            for i, proj in enumerate(proyectos, start=1):
+                
+                nombreProyecto, nombreResponsable, estado, avance = proj
+                avance = int(avance)  # aseguramos que sea entero
+                # Creamos una barra de progreso visual de 10 bloques
+                barra = "█" * (avance // 10) + "-" * (10 - avance // 10)
             
+                # Colores según avance
+                if avance < 40:
+                    color = "\033[91m"  # Rojo
+                elif avance < 70:
+                    color = "\033[93m"  # Amarillo
+                else:
+                    color = "\033[92m"  # Verde
+            
+                barraColor = f"{color}{barra}\033[0m"
+            
+                # Mostramos toda la información
+                print("{:<30} {:<25} {:<15} {:<3}% [{}]".format(
+                    nombreProyecto,
+                    nombreResponsable,
+                    estado,
+                    avance,
+                    barraColor
+                ))
+                ##generarBarra(datos, "Lista de proyectos aleatorios")
+            print()
+            print("----------------------------------Lista de proyectos aleatorios--------------------------")
+            print()
+            print("{:<30} {:<25} {:<15} {:<15}".format("Proyecto", "Responsable", "Estado", "Avance"))
+            print("-" * 90)
+            for datosRandom in datos:
+                avance = int(datosRandom["avance"])  # aseguramos que sea número
+                barra = "█" * (avance // 10) + "-" * (10 - avance // 10)
+                
+                if avance < 40:
+                    color = "\033[91m"  # Rojo
+                elif avance < 70:
+                    color = "\033[93m"  # Amarillo
+                else:
+                    color = "\033[92m"  # Verde
+        
+                barraColor = f"{color}{barra}\033[0m"
+                
+                print("{:<30} {:<25} {:<15} {:<3}% [{}]".format(
+                    datosRandom["nombreProyecto"],
+                    datosRandom["nombreResponsable"],
+                    datosRandom["estado"],
+                    avance,
+                    barraColor
+                    
+                ))
             input("\nPresiona ENTER para continuar...")
         
         case "3":
@@ -101,12 +156,15 @@ while True:
             
             # Solicitar nombre del proyecto a actualizar
             nombreProyecto = input("\nIngrese el nombre del proyecto a actualizar: ").strip()
-            
+            if not nombreProyecto:
+                print("El nombre no puede estar vacío")
+                input("\nPresiona ENTER para continuar...")
+                continue
             # Buscar el proyecto en la lista usando enumerate y next
             # Esto devuelve el índice del proyecto o None si no existe
             index = next((i for i, p in enumerate(proyectos) if p[0] == nombreProyecto), None)
             if index is None:
-                print("El proyecto no existe")
+                print("El proyecto no existe")          
                 input("\nPresiona ENTER para continuar...")
                 continue
             
@@ -190,12 +248,25 @@ while True:
         
         case "6":
             # --- GUARDAR A JSON ---
-            if len(proyectos) == 0:
+            if len(proyectos) == 0 and len(datos) == 0:
                 print("No hay proyectos para guardar")
             else:
                 try:
-                    with open("proyecto.json", "w", encoding="utf-8") as f:
-                        json.dump(proyectos, f, indent=4, ensure_ascii=False)
+                    
+                    proyectos_dict = []
+                    for p in proyectos:
+                        proyectos_dict.append({
+                            "nombreProyecto": p[0],
+                            "nombreResponsable": p[1],
+                            "estado": p[2],
+                            "avance": p[3]
+                        })
+                        
+                    ambasListas = proyectos_dict + datos
+                    
+                    with open("proyecto.json" , "w", encoding="utf-8") as f:
+                        json.dump(ambasListas, f, indent=4, ensure_ascii=False)
+                        
                     print("Agenda guardada correctamente")
                 except Exception as e:
                     print(f"Error al guardar: {e}")
@@ -205,14 +276,31 @@ while True:
             # --- RECUPERAR DE JSON ---
             try:
                 with open("proyecto.json", "r", encoding="utf-8") as f:
-                    proyectos = json.load(f)  # Cargamos la lista de proyectos
+                    proyectos_dict = json.load(f)
+                    
+                    for d in proyectos_dict:
+                        proyectos.append([
+                            d["nombreProyecto"],
+                            d["nombreResponsable"],
+                            d["estado"],
+                            d["avance"]  # ya es entero
+                        ])
+                        ##print(f"\nNombre: {nombreProyecto} - Responsable: {responsable} - Estado: {estado} - Avance: {avance}%")
                 print("Agenda recuperada correctamente")
                 if len(proyectos) == 0:
                     print("La agenda está vacía")
                 else:
                     # Mostrar todos los proyectos cargados
                     for proj in proyectos:
-                        print(f"\nNombre: {proj[0]} - Responsable: {proj[1]} - Estado: {proj[2]} - Avance: {proj[3]}%")
+                        nombreProyecto = proj["nombreProyecto"]
+                        responsable = proj["nombreResponsable"]
+                        estado = proj["estado"]
+                        avance = proj["avance"]
+                        print(f"\nNombre: {nombreProyecto} - Responsable: {responsable} - Estado: {estado} - Avance: {avance}%")
+                
+                    # for proj in proyectos:
+                    #     print(f"\nNombre: {proj[0]} - Responsable: {proj[1]} - Estado: {proj[2]} - Avance: {proj[3]}%")
+                    #     input("\nPresiona ENTER para continuar...")
             except FileNotFoundError:
                 print("No existe un archivo 'proyecto.json'. Guarde primero.")
             except json.JSONDecodeError:
@@ -221,7 +309,7 @@ while True:
                 print(f"Error al recuperar: {e}")
             
             input("\nPresiona ENTER para continuar...")
-        
+            
         case "8":
             # --- SALIR DEL PROGRAMA ---
             print("\n¿Seguro que desea salir de la Agenda de Proyectos?")
