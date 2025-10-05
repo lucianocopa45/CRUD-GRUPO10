@@ -1,14 +1,68 @@
 [
-    [
-        "Sistema Ventas",
-        "Juan Pérez",
-        "En progreso",
-        60
-    ],
-    [
-        "App Móvil",
-        "Ana Gómez",
-        "Pendiente",
-        20
-    ]
+    {
+        "nombreProyecto": "daw",
+        "nombreResponsable": "fe",
+        "estado": "Pendiente",
+        "avance": 10
+    },
+    {
+        "nombreProyecto": "Plataforma de Reclutamiento",
+        "nombreResponsable": "Camila Torres",
+        "estado": "En progreso",
+        "avance": 21
+    },
+    {
+        "nombreProyecto": "Plataforma de Telemedicina",
+        "nombreResponsable": "Paula Romero",
+        "estado": "En progreso",
+        "avance": 61
+    },
+    {
+        "nombreProyecto": "Plataforma de Inversiones",
+        "nombreResponsable": "Sofía Rodríguez",
+        "estado": "Finalizado",
+        "avance": 91
+    },
+    {
+        "nombreProyecto": "Sistema de Bibliotecas Digitales",
+        "nombreResponsable": "Federico Pérez",
+        "estado": "Finalizado",
+        "avance": 20
+    },
+    {
+        "nombreProyecto": "Plataforma de Networking",
+        "nombreResponsable": "Diego López",
+        "estado": "Finalizado",
+        "avance": 13
+    },
+    {
+        "nombreProyecto": "App de Fitness",
+        "nombreResponsable": "Julián Torres",
+        "estado": "Pendiente",
+        "avance": 10
+    },
+    {
+        "nombreProyecto": "App de Deportes",
+        "nombreResponsable": "Sofía Rodríguez",
+        "estado": "En progreso",
+        "avance": 68
+    },
+    {
+        "nombreProyecto": "Plataforma de Networking",
+        "nombreResponsable": "Federico Álvarez",
+        "estado": "En progreso",
+        "avance": 59
+    },
+    {
+        "nombreProyecto": "App de Idiomas Infantiles",
+        "nombreResponsable": "Juan Pérez",
+        "estado": "Pendiente",
+        "avance": 49
+    },
+    {
+        "nombreProyecto": "Plataforma de Cursos",
+        "nombreResponsable": "Diego Ortiz",
+        "estado": "En progreso",
+        "avance": 55
+    }
 ]

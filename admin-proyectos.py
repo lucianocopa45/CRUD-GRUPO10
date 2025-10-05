@@ -31,6 +31,9 @@ while True:
     print("5.- Buscar proyecto")
     print("6.- Guardar agenda en JSON")
     print("7.- Recuperar agenda desde JSON")
+    print("8.- Generar datos aleatorios")
+    print("9.- Generar graficos")
+    print("10.- Salir")
     
     # Pedimos al usuario que elija una opción
     opcion = input("\nElegir una opcion: ").strip()
