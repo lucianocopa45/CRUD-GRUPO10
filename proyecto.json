@@ -34,35 +34,6 @@
         "nombreResponsable": "Diego López",
         "estado": "Finalizado",
         "avance": 13
-    },
-    {
-        "nombreProyecto": "App de Fitness",
-        "nombreResponsable": "Julián Torres",
-        "estado": "Pendiente",
-        "avance": 10
-    },
-    {
-        "nombreProyecto": "App de Deportes",
-        "nombreResponsable": "Sofía Rodríguez",
-        "estado": "En progreso",
-        "avance": 68
-    },
-    {
-        "nombreProyecto": "Plataforma de Networking",
-        "nombreResponsable": "Federico Álvarez",
-        "estado": "En progreso",
-        "avance": 59
-    },
-    {
-        "nombreProyecto": "App de Idiomas Infantiles",
-        "nombreResponsable": "Juan Pérez",
-        "estado": "Pendiente",
-        "avance": 49
-    },
-    {
-        "nombreProyecto": "Plataforma de Cursos",
-        "nombreResponsable": "Diego Ortiz",
-        "estado": "En progreso",
-        "avance": 55
     }
+
 ]
