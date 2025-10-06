@@ -461,6 +461,7 @@ while True:
             # ========================
 
             def grafico_barras(df, mostrar=True):
+                loading()
                 """Gráfico de barras con el avance de cada proyecto."""
                 plt.figure(figsize=(10, 6))  # Define tamaño del gráfico
                 sns.barplot(x='nombreProyecto', y='avance', data=df, palette='coolwarm')  # Crea el gráfico de barras
@@ -474,6 +475,7 @@ while True:
                     plt.show()                       # Muestra el gráfico si se indica
 
             def grafico_conteo_estado(df, mostrar=True):
+                loading()
                 """Cantidad de proyectos por estado."""
                 plt.figure(figsize=(10, 6))
                 sns.countplot(x='estado', data=df, palette='Set2')  # Muestra la cantidad de proyectos por cada estado
@@ -485,6 +487,7 @@ while True:
                     plt.show()
 
             def grafico_dispersion(df, mostrar=True):
+                loading()
                 """Relación entre proyectos y su avance."""
                 plt.figure(figsize=(10, 6))
                 # Gráfico de dispersión donde cada punto representa un proyecto
@@ -500,6 +503,7 @@ while True:
                     plt.show()
 
             def grafico_torta(df, mostrar=True):
+                loading()
                 """Proporción de proyectos por estado."""
                 plt.figure(figsize=(8, 8))
                 conteo = df['estado'].value_counts()  # Cuenta cuántos proyectos hay por estado
@@ -521,19 +525,22 @@ while True:
                 fig, axs = plt.subplots(2, 2, figsize=(18, 10))
             
                 # --- Gráfico de barras ---
-                sns.barplot(x='nombreProyecto', y='avance', data=df, palette='coolwarm', ax=axs[0, 0])
-                axs[0, 0].set_title("Avance de cada Proyecto")
-                axs[0, 0].tick_params(axis='x', rotation=90)
+                sns.barplot(x='nombreProyecto', y='avance', data=df, palette='coolwarm', ax=axs[0, 0])# Crea un gráfico de barras mostrando el avance de cada proyecto
+                axs[0, 0].set_title("Avance de cada Proyecto")# Agrega un título al gráfico de barras
+                axs[0, 0].set_ylabel("Avance(%)")
+                axs[0, 0].tick_params(axis='x', rotation=90)# Rota las etiquetas del eje X 90° para que no se solapen
             
                 # --- Gráfico de conteo ---
-                sns.countplot(x='estado', data=df, palette='Set2', ax=axs[0, 1])
-                axs[0, 1].set_title("Cantidad de Proyectos por Estado")
-            
+                sns.countplot(x='estado', data=df, palette='Set2', ax=axs[0, 1])# Crea un gráfico de barras contando la cantidad de proyectos por estado
+                axs[0, 1].set_title("Cantidad de Proyectos por Estado")# Agrega título al gráfico de conteo
+                axs[0, 0].set_ylabel("Cantidad")
+
                 # --- Gráfico de dispersión ---
-                sns.scatterplot(x='nombreProyecto', y='avance', hue='estado', data=df, s=150, ax=axs[1, 0])
-                axs[1, 0].set_title("Relación entre Proyecto y Avance")
-                axs[1, 0].tick_params(axis='x', rotation=90)
-            
+                sns.scatterplot(x='nombreProyecto', y='avance', hue='estado', data=df, s=150, ax=axs[1, 0])# Crea un gráfico de dispersión mostrando avance de proyectos y diferenciando por estado
+                axs[1, 0].set_title("Relación entre Proyecto y Avance") # Agrega título al gráfico de dispersión
+                axs[1, 0].tick_params(axis='x', rotation=90)# Rota etiquetas del eje X 90° para mejor visibilidad
+                axs[0, 0].set_ylabel("Avance(%)")
+
                 # --- Gráfico de torta ---
                 conteo = df['estado'].value_counts()
                 axs[1, 1].pie(conteo, labels=conteo.index, autopct='%1.1f%%', startangle=140, colors=sns.color_palette('Set2'))
