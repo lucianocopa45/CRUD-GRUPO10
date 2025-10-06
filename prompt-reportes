@@ -1,0 +1,39 @@
+Quiero que generes un script en Python que haga lo siguiente:
+
+Cree automáticamente una carpeta llamada reportes dentro del proyecto (si no existe).
+
+Genere varios gráficos (pueden ser de ejemplo usando matplotlib.pyplot o seaborn).
+
+Guarde cada gráfico como una imagen (grafico_1.png, grafico_2.png, etc.) dentro de la carpeta reportes.
+
+Cree una imagen adicional llamada todos_graficos.png que muestre todos los gráficos juntos en una misma figura (por ejemplo, usando plt.subplots()).
+
+Genere un archivo PDF (reporte_graficos.pdf) donde cada página muestre un gráfico distinto.
+
+Genere un archivo HTML (reporte_graficos.html) con:
+
+Un <select> para elegir el gráfico.
+
+Un <img> que cambie dinámicamente según el gráfico elegido.
+
+Un diseño simple pero estético con CSS embebido.
+
+Todos los archivos deben guardarse en la carpeta /reportes.
+
+ Además:
+
+Usá os.makedirs() para crear la carpeta si no existe.
+
+Usá matplotlib.pyplot.savefig() para guardar las imágenes.
+
+Usá reportlab para crear el PDF.
+
+Usá open() para escribir el HTML con etiquetas <select> y <img>.
+
+El script debe poder ejecutarse directamente (python generar_reportes.py) y crear automáticamente los archivos.
+
+ Extra:
+
+Incluí un pequeño mensaje al final tipo "Reporte generado exitosamente en la carpeta 'reportes'".
+
+Si es posible, hacé que el código sea modular (con funciones: generar_graficos(), guardar_pdf(), crear_html()).
