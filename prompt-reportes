@@ -16,7 +16,7 @@ Un <select> para elegir el gráfico.
 
 Un <img> que cambie dinámicamente según el gráfico elegido.
 
-Un diseño simple pero estético con CSS embebido.
+Un diseño simple pero estético con CSS.
 
 Todos los archivos deben guardarse en la carpeta /reportes.
 

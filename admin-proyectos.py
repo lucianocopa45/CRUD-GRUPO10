@@ -6,13 +6,14 @@ import pandas as pd
 from colorama import Fore, Style, init
 import matplotlib.pyplot as plt
 import seaborn as sns
-import numpy as np
-import time, sys
-from datetime import datetime
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.pagesizes import A4
+import numpy as np #biblioteca fundamental para cálculos numéricos y manejo de arrays multidimensionales.
+import time, sys #módulo que permite trabajar con funciones de tiempo.
+#sys: módulo que da acceso a variables y funciones del intérprete de Python.
+from datetime import datetime #representa una fecha y hora
+from reportlab.lib import colors #contiene una colección de colores predefinidos.
+from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Spacer, Table, TableStyle #rea un documento PDF base al que se le agregan elementos (texto, tablas, imágenes, etc.).
+from reportlab.lib.styles import getSampleStyleSheet #proporciona estilos de texto predefinidos para párrafos y títulos
+from reportlab.lib.pagesizes import A4 #define el tamaño estándar de página A4
 
 # Lista principal que almacena todos los proyectos
 # Cada proyecto es una lista con 4 elementos: [nombreProyecto, nombreResponsable, estado, avance]
