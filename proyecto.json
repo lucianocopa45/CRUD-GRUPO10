@@ -1,14 +1,39 @@
 [
-    [
-        "Sistema Ventas",
-        "Juan Pérez",
-        "En progreso",
-        60
-    ],
-    [
-        "App Móvil",
-        "Ana Gómez",
-        "Pendiente",
-        20
-    ]
+    {
+        "nombreProyecto": "daw",
+        "nombreResponsable": "fe",
+        "estado": "Pendiente",
+        "avance": 10
+    },
+    {
+        "nombreProyecto": "Plataforma de Reclutamiento",
+        "nombreResponsable": "Camila Torres",
+        "estado": "En progreso",
+        "avance": 21
+    },
+    {
+        "nombreProyecto": "Plataforma de Telemedicina",
+        "nombreResponsable": "Paula Romero",
+        "estado": "En progreso",
+        "avance": 61
+    },
+    {
+        "nombreProyecto": "Plataforma de Inversiones",
+        "nombreResponsable": "Sofía Rodríguez",
+        "estado": "Finalizado",
+        "avance": 91
+    },
+    {
+        "nombreProyecto": "Sistema de Bibliotecas Digitales",
+        "nombreResponsable": "Federico Pérez",
+        "estado": "Finalizado",
+        "avance": 20
+    },
+    {
+        "nombreProyecto": "Plataforma de Networking",
+        "nombreResponsable": "Diego López",
+        "estado": "Finalizado",
+        "avance": 13
+    }
+
 ]
